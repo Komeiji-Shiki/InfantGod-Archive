@@ -187,9 +187,9 @@ for key,(stem,title,desc,source,unlocks,dev) in cg_info.items():
         if 'bounds' not in region:continue
         x,y,w,h=map(int,region['bounds'].split(','))
         rot=region.get('rotate','false')
-        if rot not in ['false','0']:
-            frame=im.crop((x,y,x+h,y+w)).transpose(Image.Transpose.ROTATE_90)
-        else:frame=im.crop((x,y,x+w,y+h))
+        degrees=90 if rot=='true' else 0 if rot=='false' else int(rot)
+        frame=im.crop((x,y,x+(h if degrees%180 else w),y+(w if degrees%180 else h)))
+        if degrees:frame=frame.rotate(-degrees,expand=True)
         buf=io.BytesIO();frame.save(buf,format='PNG');payload=buf.getvalue()
         path=PREVIEWS/f'{key}_{index+1}.png';path.write_bytes(payload)
         trigger=[{'id':n['id'],'line':e['line'],'conditions':e['conditions']} for n in NODES for e in n['effects'] if e['command']=='AddCG '+key]
@@ -210,11 +210,10 @@ DATA.update({'groups':groups,'routes':ROUTES,'timeline':timeline,'mechanics':MEC
 DATA.pop('sourceRoot',None);DATA.pop('declarations',None)
 DATA['stats']={'files':len(DATA['files']),'nodes':len(NODES),'choices':sum(len(n['options']) for n in NODES),'conditions':sum(len(n['conditions']) for n in NODES),'checks':sum(len(n['checks']) for n in NODES),'protocols':len(DATA['definitions']['Protocol']),'memories':len(memory_map),'future':sum(n['future'] for n in NODES)}
 DATA['licenses']={'work':'幼神 / Infant God','author':'colsalley','license':'CC BY-NC-SA 4.0','url':'https://creativecommons.org/licenses/by-nc-sa/4.0/','game':'https://store.steampowered.com/app/4238140/','wiki':'https://wiki.infantgod.xyz/','font':'Fusion Pixel Font / TakWolf · OFL 1.1'}
-if (WORK/'mod-guide.json').exists(): DATA['modGuide']=json.loads((WORK/'mod-guide.json').read_text(encoding='utf8'))
 (WORK/'guide-data.json').write_text(json.dumps(DATA,ensure_ascii=False,separators=(',',':')),encoding='utf8')
 
 # 原生插件的内容更紧凑，但每个条目仍具有精确的进度门控。
-catalog={'schemaVersion':1,'title':'幼神资料终端','version':'0.1.0','sections':[{'id':k,'title':v} for k,v in [('routes','剧情导读'),('characters','角色场景'),('voices','人格发言'),('protocols','协议收集'),('memories','记忆索引'),('achievements','成就条件'),('mechanics','机制说明')]],'entries':[],'cg':[]}
+catalog={'schemaVersion':1,'title':'幼神资料终端','version':'1.0.0','sections':[{'id':k,'title':v} for k,v in [('routes','剧情导读'),('characters','角色场景'),('voices','人格发言'),('protocols','协议收集'),('memories','记忆索引'),('achievements','成就条件'),('mechanics','机制说明')]],'entries':[],'cg':[]}
 portrait_dir=PREVIEWS.parent/'portraits';portrait_dir.mkdir(exist_ok=True)
 catalog['portraits']={}
 for key,datauri in DATA['assets'].items():

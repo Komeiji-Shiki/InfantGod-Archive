@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "title": "幼神资料终端",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "sections": [
     {
       "id": "routes",
@@ -75,8 +75,8 @@
         "Gachi"
       ],
       "summary": "粉丝线和公开案件解释共同影响“引导网暴”这个结尾选项。",
-      "body": "粉丝线和公开案件解释共同影响“引导网暴”这个结尾选项。\n\n1. 推进琪琪与粉丝团的连线，查看第二次连线中的网暴选择以及对阿尔娃威胁状态的影响。\n\n2. 在公开夏希案解释中进入“米氏”责任论，即 Greta_Prove = 5，并完成案件解释。\n\n3. 该责任论通往 Greta_End_Extra；选择“引导网暴”。\n\n4. 若选择“正常地骂回去”，会进入另一种普通收尾，不会触发这一觉醒。\n\n获得崇高核心 Module_Sublime。详细前置与责任论的选项条件可直接打开关联节点查看。",
-      "exploredBody": "获得崇高核心 Module_Sublime。详细前置与责任论的选项条件可直接打开关联节点查看。",
+      "body": "粉丝线和公开案件解释共同影响“引导网暴”这个结尾选项。\n\n1. 推进琪琪与粉丝团的连线，查看第二次连线中的网暴选择以及对阿尔娃威胁状态的影响。\n\n2. 在公开夏希案解释中进入“米氏”责任论，即 Greta_Prove = 5，并完成案件解释。\n\n3. 该责任论通往 Greta_End_Extra；选择“引导网暴”。\n\n4. 选择“正常地骂回去”会进入普通收尾。\n\n获得崇高核心 Module_Sublime。",
+      "exploredBody": "获得崇高核心 Module_Sublime。",
       "source": "Gachi_2_Hub；Gachi_Attack；Greta_ProofHub；Greta_End_Extra；Greta_3_End_Sublime",
       "nodes": [
         "Greta_3_End_Sublime"
@@ -145,8 +145,8 @@
         "BotChecker"
       ],
       "summary": "偏向荒域知识与收集，人物的交流方式变得异常。",
-      "body": "偏向荒域知识与收集，人物的交流方式变得异常。\n\n1. 路线选择“荒域”，之后保持这一决定。\n\n2. 第 6 天起再次连线；他的台词被显示为黑色方块，爱式塔仍能回应。\n\n解锁“灰区行者”记忆／协议。这里没有直接写他死亡，但其状态不能等同于普通安全抵达。",
-      "exploredBody": "解锁“灰区行者”记忆／协议。这里没有直接写他死亡，但其状态不能等同于普通安全抵达。",
+      "body": "偏向荒域知识与收集，人物的交流方式变得异常。\n\n1. 路线选择“荒域”，之后保持这一决定。\n\n2. 第 6 天起再次连线；他的台词被显示为黑色方块，爱式塔仍能回应。\n\n解锁“灰区行者”记忆／协议。再次连线时，他的文字变成黑色方块，爱式塔仍然能够回应。",
+      "exploredBody": "解锁“灰区行者”记忆／协议。再次连线时，他的文字变成黑色方块，爱式塔仍然能够回应。",
       "source": "BotChecker_2_Choose_Arid；Entry_BotChecker.three_arid",
       "nodes": [
         "Entry_BotChecker.three_arid"
@@ -179,8 +179,8 @@
         "Hachimide"
       ],
       "summary": "这个电子证人同时连接案件信息、外观奖励和两条神性路线。",
-      "body": "这个电子证人同时连接案件信息、外观奖励和两条神性路线。\n\n1. 通过相关人物获得线索，夜间进入定位菜单。\n\n2. 可用技术模块破解（关联黑客，原始检定难度 18），也可用纪子的脚本或真菌兰德的自动破解器。\n\n3. 先完成想看的审问、皮肤与邮件分支，再决定如何处置。\n\n4. 挂起沙盒：保留后续替罪对象；合并：憎恨觉醒；删除或加限制放生：分别结束此次处置；见过娜娜后还可把它归还。\n\n“晚点再决定”会返回。具体选项是否出现，以节点内已见人物与物品条件为准。",
-      "exploredBody": "“晚点再决定”会返回。具体选项是否出现，以节点内已见人物与物品条件为准。",
+      "body": "这个电子证人同时连接案件信息、外观奖励和两条神性路线。\n\n1. 通过相关人物获得线索，夜间进入定位菜单。\n\n2. 可用技术模块破解（关联黑客，原始检定难度 18），也可用纪子的脚本或真菌兰德的自动破解器。\n\n3. 先完成想看的审问、皮肤与邮件分支，再决定如何处置。\n\n4. 挂起沙盒：保留后续替罪对象；合并：憎恨觉醒；删除或加限制放生：分别结束此次处置；见过娜娜后还可把它归还。\n\n选择“晚点再决定”，可以暂时退出处置菜单。",
+      "exploredBody": "选择“晚点再决定”，可以暂时退出处置菜单。",
       "source": "FindHachimide_Hub；Hachimide_Skin；Hachimide_Email；Hachimide_Ending",
       "nodes": [
         "Hachimide_Skin"
@@ -212,8 +212,8 @@
       "characters": [
         "Greta"
       ],
-      "summary": "辩论胜负与夏希案解释分别记录，不能只看前半场赢没赢。",
-      "body": "辩论胜负与夏希案解释分别记录，不能只看前半场赢没赢。\n\n1. 辩论胜 + 自证失败：进入 SmartButDeadly，仍要面对追查。\n\n2. 辩论败 + 人类责任解释成功：进入 DumbButSafe，免于杀人 AI 的定性但仍受批评。\n\n3. 辩论败 + 自证失败：进入 WeDie，遭到封存与格式化。\n\n4. 辩论胜 + 人类责任解释成功（责任论 1～4）：进入 Normal_Win；进一步反应还取决于好感。\n\n5. 交出 AI、采用米氏责任论或提前协商跳过，会进入各自专属分支。\n\n详细逻辑由第一轮结果、第二轮结果、责任论、威胁与好感共同决定。",
+      "summary": "辩论与夏希案自证分别记录结果。两轮结果共同决定后续。",
+      "body": "辩论与夏希案自证分别记录结果。两轮结果共同决定后续。\n\n1. 辩论胜 + 自证失败：进入 SmartButDeadly，仍要面对追查。\n\n2. 辩论败 + 人类责任解释成功：进入 DumbButSafe，免于杀人 AI 的定性但仍受批评。\n\n3. 辩论败 + 自证失败：进入 WeDie，遭到封存与格式化。\n\n4. 辩论胜 + 人类责任解释成功（责任论 1～4）：进入 Normal_Win；进一步反应还取决于好感。\n\n5. 交出 AI、采用米氏责任论或提前协商跳过，会进入各自专属分支。\n\n详细逻辑由第一轮结果、第二轮结果、责任论、威胁与好感共同决定。",
       "exploredBody": "详细逻辑由第一轮结果、第二轮结果、责任论、威胁与好感共同决定。",
       "source": "Greta_3_Hold；Greta_3_End_Entry；Greta_3_End.SmartButDeadly；Greta_3_End.DumbButSafe；Greta_3_End.WeDie；Greta_3_End.Normal_Win",
       "nodes": [],
@@ -228,8 +228,8 @@
         "Trump"
       ],
       "summary": "阿尔娃事件之后的第二次特殊连线可接触川宝或拜恩。",
-      "body": "阿尔娃事件之后的第二次特殊连线可接触川宝或拜恩。\n\n1. 川宝路线中通过加入铁卫党的相关选项触发 Achv_JoinIron。\n\n2. 拜恩路线中通过加入公民党的相关选项触发 Achv_JoinCivil。\n\n这两条选择的后续组织剧情不能从第 8 天之后的注释推定已经在 Demo 中实装。",
-      "exploredBody": "这两条选择的后续组织剧情不能从第 8 天之后的注释推定已经在 Demo 中实装。",
+      "body": "阿尔娃事件之后的第二次特殊连线可接触川宝或拜恩。\n\n1. 川宝路线中通过加入铁卫党的相关选项触发 Achv_JoinIron。\n\n2. 拜恩路线中通过加入公民党的相关选项触发 Achv_JoinCivil。\n\n加入铁卫党或公民党，获得对应成就。",
+      "exploredBody": "加入铁卫党或公民党，获得对应成就。",
       "source": "Trump_1_EnterRepublic；Trump_1_BeatGreta；Biden_1_Party；Biden_1_Purpose",
       "nodes": [],
       "unlockVariables": [],
@@ -55898,8 +55898,8 @@
       "title": "查内姆",
       "characters": [],
       "summary": "Achv_CharName",
-      "body": "开局输入姓名时留空，使用默认姓名。该项由命名流程处理，剧情脚本中没有 AddAchievement 调用。\n\n触发节点：",
-      "exploredBody": "已到达成就触发场景。\n开局输入姓名时留空，使用默认姓名。该项由命名流程处理，剧情脚本中没有 AddAchievement 调用。",
+      "body": "开局输入姓名时留空，使用默认姓名。\n\n触发节点：",
+      "exploredBody": "已到达成就触发场景。\n开局输入姓名时留空，使用默认姓名。",
       "source": "SODefines/Defines/AchievementDefinition/Achv_CharName.json",
       "nodes": [],
       "fullModeOnly": true
@@ -55910,8 +55910,8 @@
       "title": "末日预言",
       "characters": [],
       "summary": "Achv_Doom",
-      "body": "追问艾曼的神谕、预言工作方式和未来。脚本记录预言相关状态；精确奖励调用与其他成就的触发方式不同。\n\n触发节点：",
-      "exploredBody": "已到达成就触发场景。\n追问艾曼的神谕、预言工作方式和未来。脚本记录预言相关状态；精确奖励调用与其他成就的触发方式不同。",
+      "body": "追问艾曼的神谕、预言工作方式和未来。\n\n触发节点：",
+      "exploredBody": "已到达成就触发场景。\n追问艾曼的神谕、预言工作方式和未来。",
       "source": "SODefines/Defines/AchievementDefinition/Achv_Doom.json",
       "nodes": [],
       "fullModeOnly": true
@@ -55979,8 +55979,8 @@
       "title": "哈基米德皮肤",
       "characters": [],
       "summary": "Achv_Hachimide_Skin",
-      "body": "在哈基米德对话中进入皮肤分支。配置里的标题是“哈基米南北路多”，这里按实际触发内容命名。\n\n触发节点：Hachimide_Skin",
-      "exploredBody": "已到达成就触发场景。\n在哈基米德对话中进入皮肤分支。配置里的标题是“哈基米南北路多”，这里按实际触发内容命名。",
+      "body": "在哈基米德对话中进入皮肤分支。\n\n触发节点：Hachimide_Skin",
+      "exploredBody": "已到达成就触发场景。\n在哈基米德对话中进入皮肤分支。",
       "source": "SODefines/Defines/AchievementDefinition/Achv_Hachimide_Skin.json",
       "nodes": [
         "Hachimide_Skin"
@@ -56051,8 +56051,8 @@
       "title": "举报罗莎",
       "characters": [],
       "summary": "Achv_ReportMaoGirl",
-      "body": "实际 AddAchievement 调用出现在警察的举报罗莎分支；导出配置里的旧注释与此不一致。\n\n触发节点：Cop_ReportIsmist_MaoGirl",
-      "exploredBody": "已到达成就触发场景。\n实际 AddAchievement 调用出现在警察的举报罗莎分支；导出配置里的旧注释与此不一致。",
+      "body": "向科尔瓦斯基举报罗莎。\n\n触发节点：Cop_ReportIsmist_MaoGirl",
+      "exploredBody": "已到达成就触发场景。\n向科尔瓦斯基举报罗莎。",
       "source": "SODefines/Defines/AchievementDefinition/Achv_ReportMaoGirl.json",
       "nodes": [
         "Cop_ReportIsmist_MaoGirl"
@@ -56065,8 +56065,8 @@
       "title": "轮盘赌",
       "characters": [],
       "summary": "Achv_Suicide",
-      "body": "实际 AddAchievement 调用出现在 Veteran_BlowHead；导出配置里的米娅旧注释与此不一致。\n\n触发节点：Veteran_BlowHead",
-      "exploredBody": "已到达成就触发场景。\n实际 AddAchievement 调用出现在 Veteran_BlowHead；导出配置里的米娅旧注释与此不一致。",
+      "body": "进行科兹洛夫的轮盘赌，并触发他中枪的分支。\n\n触发节点：Veteran_BlowHead",
+      "exploredBody": "已到达成就触发场景。\n进行科兹洛夫的轮盘赌，并触发他中枪的分支。",
       "source": "SODefines/Defines/AchievementDefinition/Achv_Suicide.json",
       "nodes": [
         "Veteran_BlowHead"
@@ -56102,7 +56102,7 @@
     {
       "id": "mechanic-1",
       "section": "mechanics",
-      "title": "检定难度不是最低属性",
+      "title": "属性、话题与骰子",
       "characters": [],
       "summary": "规则说明",
       "body": "检定投掷多枚 d20，只要至少一枚达到最终难度就成功。属性奖励增加骰子，关联话题的原始话题值降低难度，通常最多降低到 1。临时优势、效果和修正还会影响实际结果。",
@@ -56129,32 +56129,8 @@
       "title": "记忆解锁与协议获取",
       "characters": [],
       "summary": "规则说明",
-      "body": "把 Memory 变量设为 true 通常代表获得记忆／打开关联协议的收集条件。协议还可能受抽取池、所属人物以及库存／安装流程影响。“发现记忆”“拿到协议”“把协议装上”是不同步骤。",
-      "exploredBody": "把 Memory 变量设为 true 通常代表获得记忆／打开关联协议的收集条件。协议还可能受抽取池、所属人物以及库存／安装流程影响。“发现记忆”“拿到协议”“把协议装上”是不同步骤。",
-      "source": "本机脚本、配置与运行时方法",
-      "nodes": [],
-      "alwaysVisible": true
-    },
-    {
-      "id": "mechanic-4",
-      "section": "mechanics",
-      "title": "开发配置与实际剧情",
-      "characters": [],
-      "summary": "规则说明",
-      "body": "此版本包含未来日期、空白节点、编辑注释和暂未完成的等级描述。资料库默认隐藏明确的未来与测试节点；你可以主动打开“开发资料”。字段里的设想不等于当前一定能玩到的功能。",
-      "exploredBody": "此版本包含未来日期、空白节点、编辑注释和暂未完成的等级描述。资料库默认隐藏明确的未来与测试节点；你可以主动打开“开发资料”。字段里的设想不等于当前一定能玩到的功能。",
-      "source": "本机脚本、配置与运行时方法",
-      "nodes": [],
-      "alwaysVisible": true
-    },
-    {
-      "id": "mechanic-5",
-      "section": "mechanics",
-      "title": "导入进度后的显示范围",
-      "characters": [],
-      "summary": "规则说明",
-      "body": "游戏内资料面板可以导出当前存档的只读进度快照。HTML 导入后，已探索模式只展示能够确认到达的场景、已有记忆与已见 CG；含其他选项的大节点仅显示共同开场，完整分支留在全剧透模式。快照不会修改游戏存档。",
-      "exploredBody": "游戏内资料面板可以导出当前存档的只读进度快照。HTML 导入后，已探索模式只展示能够确认到达的场景、已有记忆与已见 CG；含其他选项的大节点仅显示共同开场，完整分支留在全剧透模式。快照不会修改游戏存档。",
+      "body": "获得记忆后，可以解锁相关协议的收集条件。协议抽取还受所属人物和抽取池影响；获得协议后，再把它装进思维图。",
+      "exploredBody": "获得记忆后，可以解锁相关协议的收集条件。协议抽取还受所属人物和抽取池影响；获得协议后，再把它装进思维图。",
       "source": "本机脚本、配置与运行时方法",
       "nodes": [],
       "alwaysVisible": true

@@ -13,4 +13,6 @@ dist/
 **/*.dll
 !media/*.png
 .InfantGodArchive-*
+media/.render/
+media/InfantGod-Archive-Trailer.mp4
 

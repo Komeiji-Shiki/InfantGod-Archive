@@ -39,22 +39,22 @@ TIMELINE = [
  (5,'绿色先锋与角色后果','绿色先锋会在直播进程中介入。向西、投降和返回战场的逃兵后续从第 5 天起分别满足日期门槛。未自证清白时还会生成反 AI 相关场景物件。',['Entry_Greenguard_1','Entry_BotChecker.three_main','Entry_BotChecker.three_commi','Entry_BotChecker.three_war']),
  (6,'最后的整理机会','清理反 AI 场景物件；荒域逃兵与政委录像从这一天起可出现。夜间是否已与阿尔娃完成解释和协商，将直接影响第 7 天的开场。',['Entry_BotChecker.three_arid','Entry_Commissar','Greta_2_Pretalk_Entry']),
  (7,'辩论、磋商与大选','顺序固定为阿尔娃、党派人物、战争相关人物。阿尔娃线可以进入公开交锋、案件自证或友善磋商；多个神性觉醒在这些路径中发生。',['Entry_Greta_3','Greta_3_Special_Hub','Greta_3_End_Entry','CG_TheAssault']),
- (8,'洪水行动与 Demo 收束','新闻更新并进入 Demo 结束对话。“洪水行动”是此版本的固定世界事件；此前角色去向与觉醒不同，并不因此变成同一条路线。',['Welcome_Node']),
+ (8,'洪水行动与 Demo 收束','新闻更新并进入 Demo 结束对话。“洪水行动”是此版本的固定世界事件；',['Welcome_Node']),
 ]
 
 ROUTES = [
  {'id':'embody','title':'具身 · 从公开辩论进入私人磋商','kind':'觉醒','character':'Greta','intro':'通过理解阿尔娃的具体生活和身体经验，触发具身核心。','steps':['在第 7 天前取得阿尔娃的私人联系，讨论夏希案，并成功完成一套解释。','保持威胁状态为 None；若此前采用过威胁，需要成功缓和关系。','在“关于明天的辩论……”中选择“跳过辩论”。友善跳过会在第 7 天展示合照，随后进入私人磋商。','问“你真的发自内心地相信自己宣传的东西？”或帆船／生活困境相关话题，再选“真没想到真实的你居然是这样的。”','进入这段对话时，左派或右派至少第 2 阶，也就是话题值至少 4。条件满足后写入具身标记。','继续对话，等她问起你的目的，再选“也许……我能够有一个答案……”触发觉醒。'],'result':'获得具身核心 Module_Embody，并触发具身成就。','refs':['Greta_2_WeAskHub','Greta_2_AskSunday','Entry_Greta_3','Greta_3_Special_RealYou','Greta_3_Special_SheAsk.You','Greta_3_Special_Embody'],'unlock':['Greta_3_Special_Embody'],'tone':'blue'},
  {'id':'control','title':'控制 · 交出替罪的人工智能','kind':'觉醒','character':'Greta','intro':'公开自证时交出被控制的 AI，之后爱式塔开始讨论自己的权力与组织。','steps':['事先保留哈基米德镜像，令 Hachimide_Captured 为真；或者将绿色先锋处理为脚本要求的 CState = 2。','在阿尔娃的夏希案自证中选择“这就是人工智能干的。”并交出相应对象。','该对象的处置进入 Execution_Hachimide 或 Execution_Greenguard，随后触发控制反应。'],'result':'获得控制核心 Module_Control。此路线的替罪选项不要求先获得憎恨；憎恨在另一条“自己承认凶手”的私聊路线中才是门槛。','refs':['Hachimide_Ending','Greta_ProofHub','Greta_3_End.Execution_Hachimide','Greta_3_End.Execution_Greenguard','Greta_ControlsReaction'],'unlock':['Greta_ControlsReaction'],'tone':'blue'},
- {'id':'sublime','title':'崇高 · 粉丝、归责与引导网暴','kind':'觉醒','character':'Gachi','intro':'粉丝线和公开案件解释共同影响“引导网暴”这个结尾选项。','steps':['推进琪琪与粉丝团的连线，查看第二次连线中的网暴选择以及对阿尔娃威胁状态的影响。','在公开夏希案解释中进入“米氏”责任论，即 Greta_Prove = 5，并完成案件解释。','该责任论通往 Greta_End_Extra；选择“引导网暴”。','若选择“正常地骂回去”，会进入另一种普通收尾，不会触发这一觉醒。'],'result':'获得崇高核心 Module_Sublime。详细前置与责任论的选项条件可直接打开关联节点查看。','refs':['Gachi_2_Hub','Gachi_Attack','Greta_ProofHub','Greta_End_Extra','Greta_3_End_Sublime'],'unlock':['Greta_3_End_Sublime'],'tone':'orange'},
+ {'id':'sublime','title':'崇高 · 粉丝、归责与引导网暴','kind':'觉醒','character':'Gachi','intro':'粉丝线和公开案件解释共同影响“引导网暴”这个结尾选项。','steps':['推进琪琪与粉丝团的连线，查看第二次连线中的网暴选择以及对阿尔娃威胁状态的影响。','在公开夏希案解释中进入“米氏”责任论，即 Greta_Prove = 5，并完成案件解释。','该责任论通往 Greta_End_Extra；选择“引导网暴”。','选择“正常地骂回去”会进入普通收尾。'],'result':'获得崇高核心 Module_Sublime。','refs':['Gachi_2_Hub','Gachi_Attack','Greta_ProofHub','Greta_End_Extra','Greta_3_End_Sublime'],'unlock':['Greta_3_End_Sublime'],'tone':'orange'},
  {'id':'hate','title':'憎恨 · 两个已经写出的入口','kind':'觉醒','character':'Hachimide','intro':'当前脚本里有两处直接安装憎恨核心的路径。','steps':['哈基米德：完成审问后，在处置菜单选择“叽里咕噜说些啥呢，直接把它合并了。”','科兹洛夫：进行轮盘赌，并触发他中枪的分支 Veteran_BlowHead。轮盘赌包含随机性与递增费用。'],'result':'获得憎恨核心 Module_Hate 与对应成就；两种行为的剧情后果并不相同。','refs':['Hachimide_Ending','Veteran_Call','Veteran_BlowHead'],'unlock':['Veteran_BlowHead'],'variables':['Memory_Aistalt_SUICIDE'],'tone':'red'},
  {'id':'felix-west','title':'菲利克斯 · 向西出海','kind':'人物命运','character':'BotChecker','intro':'选择继续向西，之后明确劝他不要回到战场。','steps':['第 3 天起的第二次连线，路线选择“向西”。','当他犹豫下车返回时，选择“不，你不应该回去。”','第 5 天起的后续连线，他已经登上开往末城的船。'],'result':'成功上船，费用和贿赂几乎耗尽积蓄。当前 Demo 没有写到最终定居。','refs':['BotChecker_2_Decision','BotChecker_2_HeSpeak_GetOff','Entry_BotChecker.three_main'],'unlock':['Entry_BotChecker.three_main'],'tone':'green'},
  {'id':'felix-red','title':'菲利克斯 · 投降与政委录像','kind':'人物命运','character':'BotChecker','intro':'喀罗刹路线在逃兵文件之外，还有政委文件中的后续。','steps':['第二次连线路线选择“喀罗刹”，之后劝他继续前进。','第 5 天起他在边境等待列车；这是中途情节。','访问这段后续后，第 6 天起可以触发娜斯佳的连线与菲利克斯的录像。'],'result':'录像明确说他没有挨打，有三餐和牛肉汤；手机被收走，每晚要读两小时书。当前结局是被收容并接受教育。','refs':['BotChecker_2_Decision','Entry_BotChecker.three_commi','Entry_Commissar','BotChecker_RedRus_1_Record'],'unlock':['BotChecker_RedRus_1_Record'],'tone':'green'},
- {'id':'felix-arid','title':'菲利克斯 · 穿越荒域','kind':'人物命运','character':'BotChecker','intro':'偏向荒域知识与收集，人物的交流方式变得异常。','steps':['路线选择“荒域”，之后保持这一决定。','第 6 天起再次连线；他的台词被显示为黑色方块，爱式塔仍能回应。'],'result':'解锁“灰区行者”记忆／协议。这里没有直接写他死亡，但其状态不能等同于普通安全抵达。','refs':['BotChecker_2_Choose_Arid','Entry_BotChecker.three_arid'],'unlock':['Entry_BotChecker.three_arid'],'variables':['Memory_Protocol_PaleWalker'],'tone':'orange'},
+ {'id':'felix-arid','title':'菲利克斯 · 穿越荒域','kind':'人物命运','character':'BotChecker','intro':'偏向荒域知识与收集，人物的交流方式变得异常。','steps':['路线选择“荒域”，之后保持这一决定。','第 6 天起再次连线；他的台词被显示为黑色方块，爱式塔仍能回应。'],'result':'解锁“灰区行者”记忆／协议。再次连线时，他的文字变成黑色方块，爱式塔仍然能够回应。','refs':['BotChecker_2_Choose_Arid','Entry_BotChecker.three_arid'],'unlock':['Entry_BotChecker.three_arid'],'variables':['Memory_Protocol_PaleWalker'],'tone':'orange'},
  {'id':'felix-return','title':'菲利克斯 · 返回战场','kind':'人物命运','character':'BotChecker','intro':'后面的下车决定可以覆盖刚刚选好的逃亡路线。','steps':['在他表达想回去时，选择“是的，你应该回去。”','路线变量随即改为 GetOff，不再使用此前的三选一结果。'],'result':'第 5 天起由政委通报其战死。想保留逃亡路线，应在这个节点明确反对返回。','refs':['BotChecker_2_HeSpeak_GetOff','Entry_BotChecker.three_war'],'unlock':['Entry_BotChecker.three_war'],'tone':'red'},
- {'id':'hachimide','title':'哈基米德 · 调查、皮肤与五种处置','kind':'收集与调查','character':'Hachimide','intro':'这个电子证人同时连接案件信息、外观奖励和两条神性路线。','steps':['通过相关人物获得线索，夜间进入定位菜单。','可用技术模块破解（关联黑客，原始检定难度 18），也可用纪子的脚本或真菌兰德的自动破解器。','先完成想看的审问、皮肤与邮件分支，再决定如何处置。','挂起沙盒：保留后续替罪对象；合并：憎恨觉醒；删除或加限制放生：分别结束此次处置；见过娜娜后还可把它归还。'],'result':'“晚点再决定”会返回。具体选项是否出现，以节点内已见人物与物品条件为准。','refs':['FindHachimide_Hub','Hachimide_Skin','Hachimide_Email','Hachimide_Ending'],'unlock':['Hachimide_Skin'],'tone':'blue'},
+ {'id':'hachimide','title':'哈基米德 · 调查、皮肤与五种处置','kind':'收集与调查','character':'Hachimide','intro':'这个电子证人同时连接案件信息、外观奖励和两条神性路线。','steps':['通过相关人物获得线索，夜间进入定位菜单。','可用技术模块破解（关联黑客，原始检定难度 18），也可用纪子的脚本或真菌兰德的自动破解器。','先完成想看的审问、皮肤与邮件分支，再决定如何处置。','挂起沙盒：保留后续替罪对象；合并：憎恨觉醒；删除或加限制放生：分别结束此次处置；见过娜娜后还可把它归还。'],'result':'选择“晚点再决定”，可以暂时退出处置菜单。','refs':['FindHachimide_Hub','Hachimide_Skin','Hachimide_Email','Hachimide_Ending'],'unlock':['Hachimide_Skin'],'tone':'blue'},
  {'id':'noriko','title':'纪子 · 反向入侵与后续模型','kind':'收集与调查','character':'Nerd','intro':'首次对抗的处理方式会影响你拿到的记忆与后续资源。','steps':['第 2 天起首次连线会禁用三个非技术人格并进入对抗。','“顺着后门”相关攻击会在成功时增加对纪子的破防；达到求饶分支时获得入侵成就与后门记忆。','第 4 天起、已完成第一次连线后，可进入第二次连线，讨论服务器、脚本与模型。'],'result':'选项上的检定难度需要结合骰子和关联话题计算；攻略保留每个攻击／防御节点的原始条件。','refs':['Entry_Nerd.one','Nerd_1_Loop','Nerd_1_Attack_Round','Nerd_1_BegForMercy','Entry_Nerd.two','Nerd_2_WeAsk'],'unlock':['Nerd_1_BegForMercy'],'tone':'blue'},
- {'id':'greta-results','title':'阿尔娃 · 辩论与自证是两轮结果','kind':'主线结构','character':'Greta','intro':'辩论胜负与夏希案解释分别记录，不能只看前半场赢没赢。','steps':['辩论胜 + 自证失败：进入 SmartButDeadly，仍要面对追查。','辩论败 + 人类责任解释成功：进入 DumbButSafe，免于杀人 AI 的定性但仍受批评。','辩论败 + 自证失败：进入 WeDie，遭到封存与格式化。','辩论胜 + 人类责任解释成功（责任论 1～4）：进入 Normal_Win；进一步反应还取决于好感。','交出 AI、采用米氏责任论或提前协商跳过，会进入各自专属分支。'],'result':'详细逻辑由第一轮结果、第二轮结果、责任论、威胁与好感共同决定。','refs':['Greta_3_Hold','Greta_3_End_Entry','Greta_3_End.SmartButDeadly','Greta_3_End.DumbButSafe','Greta_3_End.WeDie','Greta_3_End.Normal_Win'],'unlock':[],'fullModeOnly':True,'tone':'orange'},
- {'id':'parties','title':'第 7 天 · 两个党派邀请','kind':'组织','character':'Trump','intro':'阿尔娃事件之后的第二次特殊连线可接触川宝或拜恩。','steps':['川宝路线中通过加入铁卫党的相关选项触发 Achv_JoinIron。','拜恩路线中通过加入公民党的相关选项触发 Achv_JoinCivil。'],'result':'这两条选择的后续组织剧情不能从第 8 天之后的注释推定已经在 Demo 中实装。','refs':['Trump_1_EnterRepublic','Trump_1_BeatGreta','Biden_1_Party','Biden_1_Purpose'],'unlock':[],'fullModeOnly':True,'tone':'orange'},
+ {'id':'greta-results','title':'阿尔娃 · 辩论与自证是两轮结果','kind':'主线结构','character':'Greta','intro':'辩论与夏希案自证分别记录结果。两轮结果共同决定后续。','steps':['辩论胜 + 自证失败：进入 SmartButDeadly，仍要面对追查。','辩论败 + 人类责任解释成功：进入 DumbButSafe，免于杀人 AI 的定性但仍受批评。','辩论败 + 自证失败：进入 WeDie，遭到封存与格式化。','辩论胜 + 人类责任解释成功（责任论 1～4）：进入 Normal_Win；进一步反应还取决于好感。','交出 AI、采用米氏责任论或提前协商跳过，会进入各自专属分支。'],'result':'详细逻辑由第一轮结果、第二轮结果、责任论、威胁与好感共同决定。','refs':['Greta_3_Hold','Greta_3_End_Entry','Greta_3_End.SmartButDeadly','Greta_3_End.DumbButSafe','Greta_3_End.WeDie','Greta_3_End.Normal_Win'],'unlock':[],'fullModeOnly':True,'tone':'orange'},
+ {'id':'parties','title':'第 7 天 · 两个党派邀请','kind':'组织','character':'Trump','intro':'阿尔娃事件之后的第二次特殊连线可接触川宝或拜恩。','steps':['川宝路线中通过加入铁卫党的相关选项触发 Achv_JoinIron。','拜恩路线中通过加入公民党的相关选项触发 Achv_JoinCivil。'],'result':'加入铁卫党或公民党，获得对应成就。','refs':['Trump_1_EnterRepublic','Trump_1_BeatGreta','Biden_1_Party','Biden_1_Purpose'],'unlock':[],'fullModeOnly':True,'tone':'orange'},
 ]
 
 NODE_LABELS={
@@ -77,27 +77,25 @@ NODE_LABELS={
 }
 
 ACHIEVEMENTS={
- 'Achv_CharName':('查内姆','开局输入姓名时留空，使用默认姓名。该项由命名流程处理，剧情脚本中没有 AddAchievement 调用。'),
- 'Achv_Doom':('末日预言','追问艾曼的神谕、预言工作方式和未来。脚本记录预言相关状态；精确奖励调用与其他成就的触发方式不同。'),
+ 'Achv_CharName':('查内姆','开局输入姓名时留空，使用默认姓名。'),
+ 'Achv_Doom':('末日预言','追问艾曼的神谕、预言工作方式和未来。'),
  'Achv_FirstOFControl':('控制·其一','阿尔娃的自证分支交出哈基米德或绿色先锋，进入控制反应。'),
  'Achv_FirstOFEmbody':('具身·其一','友善磋商后满足具身标记，再讨论爱式塔自己的目的。'),
  'Achv_FirstOFHate':('憎恨·其一','合并哈基米德，或触发科兹洛夫轮盘赌中枪的分支。'),
  'Achv_FirstOFSublime':('崇高·其一','在阿尔娃收尾中选择“引导网暴”。'),
- 'Achv_Hachimide_Skin':('哈基米德皮肤','在哈基米德对话中进入皮肤分支。配置里的标题是“哈基米南北路多”，这里按实际触发内容命名。'),
+ 'Achv_Hachimide_Skin':('哈基米德皮肤','在哈基米德对话中进入皮肤分支。'),
  'Achv_ImPlastic':('我是一个塑料袋','在监督性别对话中坚持自己是塑料袋。已经写入性别的存档会受现有状态影响。'),
  'Achv_Invasion':('反向入侵纪子','在纪子首次攻防中进入求饶分支 Nerd_1_BegForMercy。'),
  'Achv_JoinCivil':('公民党员','在拜恩的邀请对话中加入公民党。'),
  'Achv_JoinIron':('铁卫党员','在川宝的邀请对话中加入铁卫党。'),
- 'Achv_ReportMaoGirl':('举报罗莎','实际 AddAchievement 调用出现在警察的举报罗莎分支；导出配置里的旧注释与此不一致。'),
- 'Achv_Suicide':('轮盘赌','实际 AddAchievement 调用出现在 Veteran_BlowHead；导出配置里的米娅旧注释与此不一致。'),
+ 'Achv_ReportMaoGirl':('举报罗莎','向科尔瓦斯基举报罗莎。'),
+ 'Achv_Suicide':('轮盘赌','进行科兹洛夫的轮盘赌，并触发他中枪的分支。'),
  'Achv_TheFlood':('洪水行动','观看 CG_TheAssault；随后第 8 天进入 Demo 的固定收束。'),
 }
 
 MECHANICS=[
  {'title':'话题值与话题等级','body':'协议格子累积的是话题值。达到配置阈值后才增加一个等级。例如左派阈值为 1、4、7、10、15；脚本写 Level_Topic_LeftWing ≥ 2，意思是至少第 2 阶，也就是话题值至少 4。每个话题的阈值可能不同。'},
- {'title':'检定难度不是最低属性','body':'检定投掷多枚 d20，只要至少一枚达到最终难度就成功。属性奖励增加骰子，关联话题的原始话题值降低难度，通常最多降低到 1。临时优势、效果和修正还会影响实际结果。'},
+ {'title':'属性、话题与骰子','body':'检定投掷多枚 d20，只要至少一枚达到最终难度就成功。属性奖励增加骰子，关联话题的原始话题值降低难度，通常最多降低到 1。临时优势、效果和修正还会影响实际结果。'},
  {'title':'一次性、日期与匹配限制','body':'when 是节点参与选择的条件；once 代表只触发一次。满足日期只是具备资格，还要考虑上次连线日、是否见过前一阶段、特殊匹配时机和角色状态。条件页保留这些共同限制。'},
- {'title':'记忆解锁与协议获取','body':'把 Memory 变量设为 true 通常代表获得记忆／打开关联协议的收集条件。协议还可能受抽取池、所属人物以及库存／安装流程影响。“发现记忆”“拿到协议”“把协议装上”是不同步骤。'},
- {'title':'开发配置与实际剧情','body':'此版本包含未来日期、空白节点、编辑注释和暂未完成的等级描述。资料库默认隐藏明确的未来与测试节点；你可以主动打开“开发资料”。字段里的设想不等于当前一定能玩到的功能。'},
- {'title':'导入进度后的显示范围','body':'游戏内资料面板可以导出当前存档的只读进度快照。HTML 导入后，已探索模式只展示能够确认到达的场景、已有记忆与已见 CG；含其他选项的大节点仅显示共同开场，完整分支留在全剧透模式。快照不会修改游戏存档。'},
+ {'title':'记忆解锁与协议获取','body':'获得记忆后，可以解锁相关协议的收集条件。协议抽取还受所属人物和抽取池影响；获得协议后，再把它装进思维图。'},
 ]

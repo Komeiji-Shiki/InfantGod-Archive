@@ -2,8 +2,8 @@
 window.ArchiveFlow = (() => {
   'use strict';
   const NS='http://www.w3.org/2000/svg';
-  const labels={entry:'场景',dialogue:'对话',effect:'状态变化',choice:'你的选择',condition:'条件判断',group:'选择回应',external:'继续阅读',end:'片段结束',call:'插入对话'};
-  const colors={entry:'#fb8b35',dialogue:'#cbd0b0',effect:'#89a898',choice:'#fb8b35',condition:'#8cb8c7',group:'#c5ba85',external:'#9fafcb',end:'#aeb39a',call:'#baa2c7'};
+  const labels={entry:'场景',dialogue:'对话',effect:'状态变化',choice:'你的选择',condition:'条件判断',group:'选择回应',external:'继续阅读',dynamic:'动态入口',end:'片段结束',call:'插入对话'};
+  const colors={entry:'#fb8b35',dialogue:'#cbd0b0',effect:'#89a898',choice:'#fb8b35',condition:'#8cb8c7',group:'#c5ba85',external:'#9fafcb',dynamic:'#a1acb3',end:'#aeb39a',call:'#baa2c7'};
   let active=null;
   const stripped=s=>s.replace(/\s+\/\/.*$/,'').trim();
   const command=s=>stripped(s).match(/^<<\s*(.*?)\s*>>$/)?.[1]||'';
@@ -65,7 +65,7 @@ window.ArchiveFlow = (() => {
     const newId=source=>source.id+'-flow-'+(++serial);
     function destination(source,target){
       const candidates=source.edges.filter(e=>e.target===target).flatMap(e=>e.ids).filter((id,i,a)=>a.indexOf(id)===i).map(id=>lookup.get(id)).filter(n=>n&&options.allowed(n));
-      if(!candidates.length){const id='unresolved-'+target;if(!vertices.has(id))add(id,'external',target,'由游戏在运行时选择。',source,null,{unresolved:true});return [id];}
+      if(!candidates.length){const id='unresolved-'+target;if(!vertices.has(id))add(id,'dynamic',target,'按当前剧情状态选择后续。',source,null,{unresolved:true});return [id];}
       return candidates.map(n=>{
         if(all&&nodes.some(x=>x.id===n.id))return n.id;
         const id='goto-'+n.id;
@@ -155,7 +155,7 @@ window.ArchiveFlow = (() => {
     edges.forEach((e,i)=>layout.setEdge(e.from,e.to,{width:e.label?Math.min(180,lines(e.label,15,1)[0]?.length*12+16):0,height:e.label?23:0},String(i)));
     dagre.layout(layout);
     const width=layout.graph().width||800,height=layout.graph().height||600;
-    container.innerHTML='<div class="graph-controls"><button data-graph-action="zoom-in" aria-label="放大分支图">＋</button><button data-graph-action="zoom-out" aria-label="缩小分支图">−</button><span class="graph-zoom">100%</span><button data-graph-action="start">起点</button><button data-graph-action="fit">全图</button><button data-graph-action="fullscreen">展开画布</button></div><div class="graph-stage" tabindex="0" aria-label="剧情分支画布，拖动平移，滚轮缩放"><svg class="graph-svg" role="img" aria-label="剧情节点、选项与条件的连接图"></svg><svg class="graph-minimap" aria-label="流程图缩略导航"></svg><div class="graph-hint">拖动平移 · 滚轮缩放 · 点击节点阅读</div></div><div class="graph-detail" hidden></div>';
+    container.innerHTML=`<div class="graph-controls"><button data-graph-action="back" aria-label="返回上一场景" title="返回上一场景，恢复阅读位置" ${options.canBack?'':'disabled'}>← 返回</button><button data-graph-action="forward" aria-label="前进到下一场景" title="前进到下一场景" ${options.canForward?'':'disabled'}>→</button><button data-graph-action="zoom-in" aria-label="放大分支图">＋</button><button data-graph-action="zoom-out" aria-label="缩小分支图">−</button><span class="graph-zoom">100%</span><button data-graph-action="start">起点</button><button data-graph-action="fit">全图</button><button data-graph-action="fullscreen">展开画布</button></div><div class="graph-stage" tabindex="0" aria-label="剧情分支画布，拖动平移，滚轮缩放"><svg class="graph-svg" role="img" aria-label="剧情节点、选项与条件的连接图"></svg><svg class="graph-minimap" aria-label="流程图缩略导航"></svg><div class="graph-hint">拖动平移 · 滚轮缩放 · 点击节点阅读</div></div><div class="graph-detail" hidden></div>`;
     const stage=container.querySelector('.graph-stage'),svg=container.querySelector('.graph-svg'),map=container.querySelector('.graph-minimap'),detail=container.querySelector('.graph-detail');
     const defs=svgEl('defs'),arrow=svgEl('marker',{id:'flow-arrow',markerWidth:8,markerHeight:8,refX:7,refY:4,orient:'auto',markerUnits:'strokeWidth'});
     arrow.append(svgEl('path',{d:'M0,0 L8,4 L0,8 Z',fill:'#d2d5b6'}));defs.append(arrow);svg.append(defs);
@@ -207,15 +207,15 @@ window.ArchiveFlow = (() => {
       if(button.dataset.graphFollow){options.onFollow(button.dataset.graphFollow);return;}
       if(button.dataset.graphRead){options.onRead(button.dataset.graphRead);return;}
       const action=button.dataset.graphAction;
-      if(action==='zoom-in')zoom(1.25);else if(action==='zoom-out')zoom(.8);else if(action==='start')center(first,.82);else if(action==='fit')fit();else if(action==='close-detail')detail.hidden=true;else if(action==='fullscreen'){container.classList.toggle('graph-expanded');const expanded=container.classList.contains('graph-expanded');button.textContent=expanded?'收起画布':'展开画布';options.onExpand(expanded);apply();}
+      if(action==='back')options.onBack();else if(action==='forward')options.onForward();else if(action==='zoom-in')zoom(1.25);else if(action==='zoom-out')zoom(.8);else if(action==='start')center(first,.82);else if(action==='fit')fit();else if(action==='close-detail')detail.hidden=true;else if(action==='fullscreen'){container.classList.toggle('graph-expanded');const expanded=container.classList.contains('graph-expanded');button.textContent=expanded?'收起画布':'展开画布';options.onExpand(expanded);apply();}
     });
     const onEscape=event=>{if(event.key==='Escape'&&container.classList.contains('graph-expanded')){container.classList.remove('graph-expanded');container.querySelector('[data-graph-action="fullscreen"]').textContent='展开画布';options.onExpand(false);apply();}};
     document.addEventListener('keydown',onEscape);
     const resize=new ResizeObserver(()=>apply());resize.observe(stage);
     if(options.expanded){container.classList.add('graph-expanded');container.querySelector('[data-graph-action="fullscreen"]').textContent='收起画布';}
-    center(first,.82);
-    active={destroy:()=>{resize.disconnect();document.removeEventListener('keydown',onEscape);},center,select,graph};
+    if(options.initialView){scale=options.initialView.scale;tx=options.initialView.tx;ty=options.initialView.ty;apply();}else center(first,.82);
+    active={destroy:()=>{resize.disconnect();document.removeEventListener('keydown',onEscape);},center,select,graph,snapshot:()=>({scale,tx,ty})};
     return active;
   }
-  return {mount,parse,destroy(){active?.destroy();active=null;}};
+  return {mount,parse,snapshot:()=>active?.snapshot()||null,destroy(){active?.destroy();active=null;}};
 })();
