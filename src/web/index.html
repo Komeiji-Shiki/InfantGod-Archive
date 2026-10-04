@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="幼神 Demo 剧情、分支、解锁条件、协议、成就与 CG 的离线资料终端。">
+<title>幼神资料终端 · OmniArchive</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23383b39'/%3E%3Cpath d='M6 6h20v20H6z' fill='none' stroke='%23eeebbf' stroke-width='2'/%3E%3Cpath d='M11 11h10v3H11zm0 7h10v3H11z' fill='%23fa8632'/%3E%3C/svg%3E">
+<style>/*__CSS__*/</style>
+</head>
+<body>
+<header class="osbar"><a class="brand" href="#overview"><span class="brand-icon">▧</span> OmniArchive.exe <span class="brand-sub">// 幼神资料终端</span></a><div class="window-tools"><span id="connection-label">LOCAL ARCHIVE</span><span aria-hidden="true">▁　□　×</span></div></header>
+<div class="desktop">
+<aside class="sidebar">
+ <div class="sidebar-title"><span class="small-label">爱式塔 · 技术 / 整理</span><strong>幼神<span class="accent"> / </span>观测档案</strong><span class="build-label">DEMO · ARCHIVE v1.0</span></div>
+ <nav id="navigation" aria-label="资料分类">
+  <button data-view="overview" class="active"><span>01</span> 总览与时间线</button>
+  <button data-view="routes"><span>02</span> 关键剧情路线</button>
+  <button data-view="characters"><span>03</span> 角色与全部分支</button>
+  <button data-view="thresholds"><span>04</span> 条件与检定</button>
+  <button data-view="protocols"><span>05</span> 协议与记忆</button>
+  <button data-view="collections"><span>06</span> 成就与 CG</button>
+  <button data-view="world"><span>07</span> 世界资料</button>
+  <button data-view="mod"><span>08</span> Mod 与资料来源</button>
+ </nav>
+ <div class="sidebar-bottom"><span class="small-label">查阅范围</span><button id="mode-button" class="mode-button">选择查看模式</button><button id="import-button" class="subtle-button">导入游戏进度</button><input id="progress-file" type="file" accept="application/json,.json" hidden><div id="progress-info" class="tiny">全部内容保存在本文件内。<br>断网也能查阅。</div><label class="dev-toggle"><input type="checkbox" id="show-dev"> 显示开发资料</label></div>
+</aside>
+<main class="workspace" id="workspace">
+ <div class="topline"><div><span class="small-label" id="view-code">ARCHIVE / 01</span><h1 id="view-title">总览与时间线</h1></div><div class="searchbox"><span aria-hidden="true">⌕</span><input id="global-search" type="search" autocomplete="off" placeholder="搜索角色、选项、协议或台词…" aria-label="搜索全部资料"><kbd>/</kbd></div></div>
+ <div id="scope-note" class="scope-note" hidden></div>
+ <div id="content" class="content"></div>
+ <footer class="footer"><span>原作《幼神》 · colsalley</span><span>剧情与资产：CC BY-NC-SA 4.0 · 非官方资料 Mod</span><a href="#mod">来源与许可</a></footer>
+</main>
+</div>
+<dialog id="mode-dialog" class="mode-dialog"><div class="dialog-titlebar">Archive / 查阅权限</div><div class="dialog-inner"><span class="small-label">欢迎回来，监督。</span><h2>这次，想看到哪一部分？</h2><p>两种模式使用同一份资料。你可以随时切换。</p><div class="mode-options"><button data-mode="all"><span class="mode-icon">▤</span><strong>全部剧透</strong><span>查看完整路线、隐藏条件、人物结局和收集资料。</span><b>进入完整档案</b></button><button data-mode="explored"><span class="mode-icon">▣</span><strong>仅已探索</strong><span>导入当前存档快照，只开放已到达的场景、记忆与 CG。</span><b>跟随游戏进度</b></button></div><p class="tiny">进度快照由游戏内 Mod 导出。导入只用于本地显示，不会改写存档。</p></div></dialog>
+<dialog id="detail-dialog" class="detail-dialog"><div class="dialog-titlebar"><span id="detail-title">档案详情</span><button data-action="close-detail" aria-label="关闭详情">×</button></div><div id="detail-content" class="dialog-scroll"></div></dialog>
+<dialog id="image-dialog" class="image-dialog"><div class="dialog-titlebar"><span id="image-title">CG 查看</span><button data-action="close-image" aria-label="关闭图片">×</button></div><div id="image-content"></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script id="archive-data" type="application/json">/*__DATA__*/</script>
+<script>/*__DAGRE__*/</script>
+<script>/*__FLOW__*/</script>
+<script>/*__JS__*/</script>
+</body></html>

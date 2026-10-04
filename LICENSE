@@ -1,0 +1,26 @@
+InfantGod Archive / 幼神资料终端
+
+本项目按内容类型采用不同许可。
+
+1. 本项目原创的软件代码与原创配乐（src、tools、media/compose_music.py、
+   media/terminal-at-dawn.wav）采用 MIT License；剧情导读数据除外。
+   完整条款见 licenses/MIT.txt。
+
+2. 《幼神》导出的脚本、剧情文本、人物与场景资产，以及据其整理的剧情资料
+   （data、assets/cg、assets/portraits、tools/curation.py、宣传截图与视频）采用
+   Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International。
+   原作：Infant God / 幼神；作者：colsalley。
+   来源：https://store.steampowered.com/app/4238140/
+   许可：https://creativecommons.org/licenses/by-nc-sa/4.0/
+   分享包含这些内容的资料包需署名、非商业，并保留相同许可。
+
+3. Fusion Pixel Font 字体采用 SIL Open Font License 1.1。
+   作者及完整条款见 licenses/OFL-1.1.txt。
+
+4. Dagre 3.1.1 的 MIT 许可和附带声明位于 src/web/vendor。
+
+5. BepInEx、Doorstop、Harmony、MonoMod、Mono.Cecil 等第三方组件保留其原许可，
+   详见 src/plugin/THIRD-PARTY-NOTICES.md。游戏运行库不作为本项目源码依赖文件分发。
+
+本项目为非官方 Mod。原作者不为本 Mod 的修改与运行结果负责。
+

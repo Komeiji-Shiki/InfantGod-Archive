@@ -1,0 +1,16 @@
+Infant God (幼神) Mod and data distribution notice
+================================================
+
+Original work: Infant God (幼神)
+Author: colsalley
+Source: https://store.steampowered.com/app/4238140/_/
+License: Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+License URL: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+This file is a project-specific notice. The complete legal license text is available at the official License URL above.
+
+You may create and share Mods based on these materials, including Mods that add content, remove content, translate content, mix scripts, or create new stories.
+You must give appropriate credit to the original work and author, may not use the adapted Mod for commercial sale, and must distribute adaptations under the same CC BY-NC-SA 4.0 license.
+Exporting or distributing these materials constitutes acceptance of the applicable CC BY-NC-SA 4.0 terms.
+
+Mods are created and distributed by their respective authors. The original author is not responsible for any Mod's content, behavior, claims, or consequences.

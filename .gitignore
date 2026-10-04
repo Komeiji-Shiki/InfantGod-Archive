@@ -1,0 +1,16 @@
+dist/
+.work/
+**/bin/
+**/obj/
+**/deps/
+**/__pycache__/
+**/progress.json
+**/progress-*.json
+**/LogOutput.log
+**/playerprefs.xml
+**/*.es3
+**/*.pdb
+**/*.dll
+!media/*.png
+.InfantGodArchive-*
+
