@@ -1,0 +1,68 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 71.1111111111111,
+  "scenes": [
+    {
+      "asset": "title.png",
+      "beats": 8,
+      "title": "",
+      "caption": ""
+    },
+    {
+      "asset": "native-desktop.mp4",
+      "beats": 16,
+      "title": "游戏桌面的资料终端",
+      "caption": "点击桌面快捷方式，或按 F8 打开。"
+    },
+    {
+      "asset": "native-search.png",
+      "beats": 16,
+      "title": "从角色、选项或一句台词开始",
+      "caption": "剧情、人格发言、协议与记忆，放在同一处查阅。"
+    },
+    {
+      "asset": "web-branches-close.png",
+      "beats": 12,
+      "title": "沿着真正的分支阅读",
+      "caption": "选择、条件与后续，顺着连线查看。"
+    },
+    {
+      "asset": "web-follow.png",
+      "beats": 12,
+      "title": "点击后续，继续阅读",
+      "caption": "进入下一段对话，保留完整的上下文。"
+    },
+    {
+      "asset": "web-tech-dialogue.png",
+      "beats": 16,
+      "title": "四种人格，各自的发言",
+      "caption": "共情、技术、键政、媚俗，可以分别查询。"
+    },
+    {
+      "asset": "web-dice.png",
+      "beats": 16,
+      "title": "查清每个选项的条件",
+      "caption": "话题等级、属性与检定，放在一起查看。"
+    },
+    {
+      "asset": "native-cg.mp4",
+      "beats": 16,
+      "title": "CG 画廊",
+      "caption": "在游戏内独立查看画面，切换镜头与动画。"
+    },
+    {
+      "asset": "native-mode.png",
+      "beats": 8,
+      "title": "查看范围，由你选择",
+      "caption": "想保留未知，就选择“仅已探索”。"
+    },
+    {
+      "asset": "end.png",
+      "beats": 8,
+      "title": "",
+      "caption": ""
+    }
+  ]
+}
