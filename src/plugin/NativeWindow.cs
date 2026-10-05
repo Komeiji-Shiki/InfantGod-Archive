@@ -80,6 +80,9 @@ namespace Graywill.InfantGodCodex
             if (textLoader != null) textLoader.visible = false;
             window.contentPane = pane;
             frame = pane.GetChild("frame")?.asCom;
+            // 框体与内容面板的原始尺寸不同，先保留原生框体尺寸再建立同步关系。
+            float templateWidth = frame != null ? frame.width : pane.width;
+            float templateHeight = frame != null ? frame.height : pane.height;
             if (frame != null)
             {
                 // Media 模板的框体没有跟随内容面板的尺寸，需要显式建立关系。
@@ -88,8 +91,8 @@ namespace Graywill.InfantGodCodex
                 frame.AddRelation(pane, RelationType.Size);
             }
             // OS 全屏按原模板缩放，桌面窗口保留模板基础尺寸；主菜单单独自适应。
-            float width = pane.width;
-            float height = pane.height;
+            float width = templateWidth;
+            float height = templateHeight;
             if (!managedByOS)
             {
                 float screenScale = Mathf.Clamp(Screen.width / 1600f, 0.65f, 1.4f);
