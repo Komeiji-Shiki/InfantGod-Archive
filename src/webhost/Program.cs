@@ -67,6 +67,7 @@ namespace Graywill.InfantGod.WebHost
         private bool started;
         private bool pageReady;
         private bool ending;
+        private bool capturingBackground;
         private Rectangle appliedBounds = Rectangle.Empty;
         private readonly JavaScriptSerializer serializer = new JavaScriptSerializer { MaxJsonLength = 24000000 };
         private static readonly HashSet<string> Actions = new HashSet<string>(StringComparer.Ordinal)
@@ -224,10 +225,17 @@ namespace Graywill.InfantGod.WebHost
         private void ApplyLayout()
         {
             if (layout == null) return;
-            bool show = pageReady && Value<bool>(layout, "visible", false) && Value<bool>(layout, "focused", true) && !Native.IsIconic(gameWindow);
+            bool show = pageReady && Value<bool>(layout, "visible", false) && !Native.IsIconic(gameWindow);
             object rawBounds;
             if (!layout.TryGetValue("bounds", out rawBounds)) show = false;
             if (!show) { if (Visible) Hide(); return; }
+            if (!Value<bool>(layout, "focused", true))
+            {
+                // 先保存可见页面，再交给游戏绘制，后方窗口仍然保留内容且能被原生窗口遮挡。
+                if (Visible && !capturingBackground) CaptureBackground();
+                return;
+            }
+            browser.Enabled = true;
             var bounds = rawBounds as Dictionary<string, object>;
             if (bounds == null) return;
             Native.RECT parent;
@@ -243,6 +251,29 @@ namespace Graywill.InfantGod.WebHost
             {
                 Native.SetWindowPos(Handle, IntPtr.Zero, left, top, width, height, Native.SWP_NOACTIVATE | Native.SWP_NOZORDER);
                 appliedBounds = rectangle;
+            }
+        }
+
+        private async void CaptureBackground()
+        {
+            if (browser.CoreWebView2 == null) { Hide(); return; }
+            capturingBackground = true;
+            browser.Enabled = false;
+            try
+            {
+                using (var image = new MemoryStream())
+                {
+                    await browser.CoreWebView2.CapturePreviewAsync(CoreWebView2CapturePreviewImageFormat.Png, image);
+                    if (ending) return;
+                    File.WriteAllBytes(Path.Combine(profilePath, "background-preview.png"), image.ToArray());
+                    SendAction("backgroundReady");
+                }
+            }
+            catch (Exception error) { if (!ending) Log("后台页面预览：" + error.Message); }
+            finally
+            {
+                capturingBackground = false;
+                if (!ending && !IsDisposed && (layout == null || !Value<bool>(layout, "visible", false) || !Value<bool>(layout, "focused", true))) Hide();
             }
         }
 

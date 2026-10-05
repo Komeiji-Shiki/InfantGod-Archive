@@ -181,6 +181,7 @@ namespace Graywill.InfantGodCodex
 
         private void HandleLoaded()
         {
+            integration?.ClearBackgroundPreview();
             webHost?.CloseCG();
             webHost?.SendProgress(true);
             nextRefresh = 0;

@@ -23,6 +23,6 @@ Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'LICENSE') -Destination $OutputP
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'licenses\OFL-1.1.txt') -Destination (Join-Path $OutputPath 'LICENSES\FusionPixel-OFL.txt') -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'src\web\vendor\LICENSE') -Destination (Join-Path $OutputPath 'LICENSES\Dagre-MIT.txt') -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'src\web\vendor\dagre-NOTICES.txt') -Destination (Join-Path $OutputPath 'LICENSES\Dagre-NOTICES.txt') -Force
-& python (Join-Path $PSScriptRoot 'src\installer\build.py') --package $OutputPath --output (Join-Path $PSScriptRoot 'dist\InfantGod-Archive-Setup-v1.0.1.exe')
+& python (Join-Path $PSScriptRoot 'src\installer\build.py') --package $OutputPath --output (Join-Path $PSScriptRoot 'dist\InfantGod-Archive-Setup-v1.0.2.exe')
 if ($LASTEXITCODE -ne 0) { throw '一键安装器生成失败。' }
 Write-Output "资料终端完整发布目录：$OutputPath"

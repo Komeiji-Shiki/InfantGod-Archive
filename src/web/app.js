@@ -29,11 +29,11 @@
   const visited = keys => (keys || []).some(key => state.visited.has(key));
   const nodeKnown = n => visited(n.visitKeys);
   const visibleTitle = n => modeFull()?n.display:(n.exploredTitle||'已到达的场景');
-  const nodeAllowed = n => (!n.future || state.dev) && (modeFull() || nodeKnown(n));
+  const nodeAllowed = n => (!n.future || state.dev) && (modeFull() || (!n.title.startsWith('VariableDeclare') && nodeKnown(n)));
   const routeAllowed = r => modeFull() || (!r.fullModeOnly && (visited(r.unlockNodes) || (r.unlockVariables || []).some(truth)));
   const itemKnown = item => Boolean(item._variable && truth(item._variable));
   const cgKnown = cg => Boolean(state.progress && ((state.progress.seenCG || []).includes(cg.cgKey) || visited(cg.unlockNodes)));
-  const groupAllowed = g => (!g.future || state.dev) && (modeFull() || g.nodes.some(id => nodeKnown(byId.get(id))));
+  const groupAllowed = g => (!g.future || state.dev) && (modeFull() || g.nodes.some(id => nodeAllowed(byId.get(id))));
   const brief = n => n.opening || '';
   const refsOf = labels => D.nodes.filter(n=>labels.includes(n.label)||labels.includes(n.title)).map(n=>n.id);
 
@@ -91,11 +91,27 @@
     ${sectionHeading('读懂条件，再做选择')}<div class="rule-grid">${D.mechanics.slice(0,4).map(m=>`<article class="rule-card"><h3>${esc(m.title)}</h3><p>${esc(m.body)}</p></article>`).join('')}</div>`;
   }
 
+  function routeView(r){
+    if(modeFull()||!['hate','hachimide'].includes(r.id))return {title:r.title,result:r.result};
+    const ended=truth('$Hachimide_End_Flag'),captured=truth('$Hachimide_Captured');
+    const hate=truth('$Memory_Aistalt_SUICIDE'),veteran=visited(['Veteran_BlowHead']);
+    // 两条入口共用憎恨记忆；只有排除轮盘赌入口后，才能从这份旧存档确认合并来源。
+    const merged=ended&&hate&&!captured&&!veteran&&visited(['Hachimide_Ending']);
+    if(r.id==='hate')return hate?{title:'憎恨 · 已获得核心',result:merged?'已合并哈基米德镜像，获得憎恨核心与对应成就。':veteran?'已触发科兹洛夫的轮盘赌事件，获得憎恨核心与对应成就。':'当前存档已获得憎恨核心与对应成就。'}:{title:'憎恨 · 已到达相关场景',result:'已到达相关觉醒场景，当前快照尚未记录获得憎恨核心。'};
+    let result;
+    if(visited(['Greta_3_End.Execution_Hachimide']))result='已在公开自证中交出哈基米德镜像。';
+    else if(captured)result='已挂起沙盒模拟，保留哈基米德镜像。';
+    else if(merged)result='已将哈基米德镜像合并，处置已完成，并获得憎恨核心。';
+    else if(ended)result='哈基米德的处置已完成。当前存档没有单独记录具体处置选项。';
+    else if(visited(['Hachimide_Ending']))result='已进入哈基米德的处置菜单，当前存档尚未记录最终处置。';
+    else result='已进入哈基米德的调查内容，当前存档尚无最终处置记录。';
+    return {title:'哈基米德 · 当前处置进度',result};
+  }
   function routeCard(r){
-    const full=modeFull();return `<article class="route-card ${r.tone}"><div class="chips">${chip(r.kind)}${chip(label(r.character),r.tone)}</div><div class="route-head">${portrait(r.character)?`<img src="${portrait(r.character)}" alt="">`:''}<h3>${esc(r.title)}</h3></div>${full?`<p>${esc(r.intro)}</p><ol class="route-steps">${r.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`:''}<div class="outcome"><b>${full?'这一条路通向':'已确认的后续'}</b>${esc(r.result)}</div>${nodeLinks(full?r.nodeIds:r.nodeIds.filter(id=>nodeKnown(byId.get(id))))}</article>`;
+    const full=modeFull(),view=routeView(r);return `<article class="route-card ${r.tone}"><div class="chips">${chip(r.kind)}${chip(label(r.character),r.tone)}</div><div class="route-head">${portrait(r.character)?`<img src="${portrait(r.character)}" alt="">`:''}<h3>${esc(view.title)}</h3></div>${full?`<p>${esc(r.intro)}</p><ol class="route-steps">${r.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`:''}<div class="outcome"><b>${full?'这一条路通向':'当前存档进度'}</b>${esc(view.result)}</div>${nodeLinks(full?r.nodeIds:r.nodeIds.filter(id=>nodeKnown(byId.get(id))))}</article>`;
   }
   function renderRoutes(){
-    const rows=D.routes.filter(routeAllowed).filter(r=>matches(r.title+r.intro+r.steps.join(' ')+r.result));
+    const rows=D.routes.filter(routeAllowed).filter(r=>{const view=routeView(r);return matches(view.title+view.result+(modeFull()?r.intro+r.steps.join(' '):''));});
     return `${modeFull()?`<div class="flowboard"><div class="flow-top"><button class="flowbox" data-character="Greta"><strong>阿尔娃事件</strong>第 3 天相遇 · 第 7 天分流</button></div><div class="flow-trunk"></div><div class="flow-split"><div class="flow-branch"><div class="flowbox green"><strong>友善协商</strong><p>解释夏希案，跳过辩论<br>私人磋商 · 具身</p></div></div><div class="flow-branch"><div class="flowbox blue"><strong>公开辩论与自证</strong><p>两轮结果分别记录<br>普通胜负 · 控制</p></div></div><div class="flow-branch"><div class="flowbox orange"><strong>粉丝与舆论</strong><p>米氏责任论与网暴收尾<br>崇高</p></div></div></div><p class="flowcaption">憎恨另有哈基米德合并与科兹洛夫轮盘赌入口。点开下方路线查看完整条件。</p></div>`:''}${toolbar('','搜索觉醒、人物命运或关键决定…')}${rows.length?`<div class="route-grid">${rows.map(routeCard).join('')}</div>`:empty('还没有可见的路线','全剧透模式可以查阅全部路线；已探索模式只开放已经确认发生的专属后续。',!state.progress)}`;
   }
 
@@ -106,16 +122,16 @@
     const g=groups.find(g=>g.id===state.character);
     const nodes=g.nodes.map(id=>byId.get(id)).filter(nodeAllowed).filter(n=>!n.title.startsWith('VariableDeclare')).filter(n=>matches(visibleTitle(n)+' '+n.label+' '+(modeFull()?n.raw:brief(n))));
     const entries=g.entries.map(id=>byId.get(id)).filter(nodeAllowed).filter(n=>n.when.length);
-    const list=`<div class="character-list" aria-label="角色列表">${groups.map(c=>`<button class="character-button ${c.id===g.id?'active':''}" data-character="${c.id}">${c.portrait?`<img src="${c.portrait}" alt="">`:''}<span><strong>${esc(c.name)}</strong><small>${c.nodes.filter(id=>nodeAllowed(byId.get(id))).length} 个节点</small></span></button>`).join('')}</div>`;
+    const list=`<div class="character-list" aria-label="角色列表">${groups.map(c=>`<button class="character-button ${c.id===g.id?'active':''}" data-character="${c.id}">${c.portrait?`<img src="${c.portrait}" alt="">`:''}<span><strong>${esc(c.name)}</strong><small>${flowNodes(c).length} 个${modeFull()?'':'已探索'}场景</small></span></button>`).join('')}</div>`;
     const cover=`<div class="char-cover ${state.characterView==='flow'?'compact-cover':''}">${g.portrait?`<img src="${g.portrait}" alt="${esc(g.name)}">`:''}<div><span class="small-label">CHARACTER / ${esc(g.id)}</span><h2>${esc(g.name)}</h2><strong>${modeFull()?esc(g.tagline):'已探索场景'}</strong>${modeFull()?`<p>${esc(g.note)}</p>`:''}</div></div>`;
     const viewTabs=tabs([['flow','剧情分支图'],['nodes',g.id==='Aistalt'?'场景与夜谈':'场景列表'],...(g.id==='Aistalt'?[['voices','四种人格的发言']]:[])],state.characterView,'data-character-view');
-    const normal=`${modeFull()&&entries.length?`<details><summary>各次连线如何出现 · ${entries.length} 个入口</summary>${entries.map(n=>`<article class="entry-card"><h3>${esc(n.display)}</h3>${conditionList(n.when)}${nodeLinks([n.id])}</article>`).join('')}</details>`:''}${toolbar(`<span class="count">${nodes.length} 个场景</span>`,'搜索这个人物的选项、台词或条件…')}<div class="node-list">${nodes.length?pageRows(nodes,nodeRow):empty('没有匹配的场景','尝试换一个选项关键词。')}</div>`;
+    const normal=`${modeFull()&&entries.length?`<details><summary>各次连线如何出现 · ${entries.length} 个入口</summary>${entries.map(n=>`<article class="entry-card"><h3>${esc(n.display)}</h3>${conditionList(n.when)}${nodeLinks([n.id])}</article>`).join('')}</details>`:''}${toolbar(`<span class="count">${nodes.length} 个场景</span>`,modeFull()?'搜索这个人物的选项、台词或条件…':'搜索已探索的话题或对话开头…')}<div class="node-list">${nodes.length?pageRows(nodes,nodeRow):empty('没有匹配的场景',modeFull()?'尝试换一个选项关键词。':'当前只检索存档确认的场景标题与共同开场。')}</div>`;
     return `<div class="character-layout ${state.characterView==='flow'?'with-flow':''}">${list}<div>${cover}${viewTabs}${g.id==='Aistalt'&&state.characterView==='voices'?renderVoices():state.characterView==='flow'?renderFlowchart(g):normal}</div></div>`;
   }
 
   function flowNodes(g){return g.nodes.map(id=>byId.get(id)).filter(nodeAllowed).filter(n=>!n.title.startsWith('VariableDeclare'));}
   function flowSelection(g){
-    const nodes=flowNodes(g);
+    const nodes=flowNodes(g).filter(n=>modeFull()||matches(visibleTitle(n)+' '+brief(n)));
     const preferred={Aistalt:'Aistalt_Night',Greta:'Greta_3_End_Entry',BotChecker:'BotChecker_2_Decision',Hachimide:'Hachimide_Ending',Nerd:'Nerd_1_Attack_Round',Gachi:'Gachi_2_Hub',Veteran:'Veteran_1_Hub'};
     let focus=nodes.find(n=>n.id===state.flowNode);
     if(!focus)focus=nodes.find(n=>n.title===preferred[g.id])||nodes.find(n=>n.options.filter(o=>!o.path.length).length>=2)||nodes[0];
@@ -129,9 +145,11 @@
     return (chapter?'第 '+chapter+' 次连线':'')+(known[suffix||base.split('_').slice(1).join('_')]?' · '+known[suffix||base.split('_').slice(1).join('_')]:suffix?' · '+suffix:'')||base;
   }
   function renderFlowchart(g){
-    const {nodes,focus}=flowSelection(g);if(!focus)return empty('还没有可读的场景','导入游戏进度后，我会把已经到达的场景列在这里。',true);
+    const {nodes,focus}=flowSelection(g);
+    const search=modeFull()?'':toolbar(`<span class="count">${nodes.length} 个已探索场景</span>`,'按话题或对话开头查找场景…');
+    if(!focus)return search+empty(state.filter?'没有匹配的已探索场景':'还没有可读的场景',state.filter?'清空关键词可以查看当前人物的全部已探索场景。':'导入游戏进度后，我会把已经到达的场景列在这里。',!state.progress);
     const files=[...new Set(nodes.map(n=>n.file))];
-    return `<div class="flow-reader"><div class="flow-selectors"><label>查看范围<select id="flow-scope"><option value="scene" ${state.flowScope==='scene'?'selected':''}>当前场景的分支</option><option value="all" ${state.flowScope==='all'?'selected':''}>这个人物的全线概览</option></select></label><label>章节<select id="flow-file">${files.map(file=>`<option value="${esc(file)}" ${file===focus.file?'selected':''}>${esc(chapterName(file,nodes))} · ${nodes.filter(n=>n.file===file).length} 个场景</option>`).join('')}</select></label><label class="scene-select">场景<select id="flow-node">${nodes.filter(n=>n.file===focus.file).map(n=>`<option value="${n.id}" ${n.id===focus.id?'selected':''}>${esc(visibleTitle(n))}</option>`).join('')}</select></label></div><div class="graph-legend"><span><i class="scene"></i>场景</span><span><i class="choice"></i>选择</span><span><i class="condition"></i>条件</span><span><i class="external"></i>后续</span><span class="graph-source">${esc(focus.file.split('/').pop())}</span></div>${modeFull()?'':'<p class="tiny">当前只显示已到达的场景。</p>'}<div id="story-flow" class="story-flow"></div></div>`;
+    return `${search}<div class="flow-reader"><div class="flow-selectors"><label>查看范围<select id="flow-scope"><option value="scene" ${state.flowScope==='scene'?'selected':''}>${modeFull()?'当前场景的分支':'当前场景的已知内容'}</option><option value="all" ${state.flowScope==='all'?'selected':''}>${modeFull()?'这个人物的全线概览':'已探索场景概览'}</option></select></label><label>章节<select id="flow-file">${files.map(file=>`<option value="${esc(file)}" ${file===focus.file?'selected':''}>${esc(chapterName(file,nodes))} · ${nodes.filter(n=>n.file===file).length} 个场景</option>`).join('')}</select></label><label class="scene-select">场景<select id="flow-node">${nodes.filter(n=>n.file===focus.file).map(n=>`<option value="${n.id}" ${n.id===focus.id?'selected':''}>${esc(visibleTitle(n))}</option>`).join('')}</select></label></div><div class="graph-legend"><span><i class="scene"></i>场景</span><span><i class="choice"></i>选择</span><span><i class="condition"></i>条件</span><span><i class="external"></i>后续</span><span class="graph-source">${esc(focus.file.split('/').pop())}</span></div>${modeFull()?'':'<p class="tiny">只显示当前存档确认到达的场景，连线表示脚本中的跳转关系。</p>'}<div id="story-flow" class="story-flow"></div></div>`;
   }
   function mountFlowchart(){
     const root=el('story-flow');if(!root){window.ArchiveFlow.destroy();return;}
@@ -270,13 +288,16 @@
       if(matches(readName(p)+p._desc+p._id,q))rows.push({title:readName(p),type:type==='Protocol'?'协议':'记忆',text:p._desc,action:`data-item="${p._id}" data-type="${type}"`});
     }
     const highlight=text=>{const s=String(text||'');const pos=lower(s).indexOf(lower(q));return pos<0?esc(s):esc(s.slice(0,pos))+'<mark>'+esc(s.slice(pos,pos+q.length))+'</mark>'+esc(s.slice(pos+q.length));};
-    return `<div class="section-heading"><h2>“${esc(q)}”</h2><small>${rows.length} 条匹配 · ${modeFull()?'全部档案':'已探索内容'}</small></div>${rows.length?pageRows(rows,r=>`<article class="search-result"><div class="badges">${chip(r.type)}</div><h3>${highlight(r.title)}</h3><p>${highlight(r.text)}</p><button ${r.action}>打开档案</button></article>`,20):empty('没有找到匹配内容','试试角色名、选项中的几个字，或检查当前的剧透模式。')}`;
+    return `<div class="section-heading"><h2>“${esc(q)}”</h2><small>${rows.length} 条匹配 · ${modeFull()?'全部档案':'已探索内容'}</small></div>${rows.length?pageRows(rows,r=>`<article class="search-result"><div class="badges">${chip(r.type)}</div><h3>${highlight(r.title)}</h3><p>${highlight(r.text)}</p><button ${r.action}>打开档案</button></article>`,20):empty('没有找到匹配内容',modeFull()?'试试角色名或选项中的几个字。':'当前只搜索存档确认的场景、共同开场和已获得记忆；未确认的分支与后果不会参与搜索。')}`;
   }
 
   function render(){
     pendingHostRender=false;
     document.querySelectorAll('[data-view]').forEach(btn=>btn.classList.toggle('active',btn.dataset.view===state.view));
-    el('view-title').textContent=state.search?'全局搜索':viewNames[state.view];
+    document.querySelector('[data-view="characters"]').lastChild.textContent=modeFull()?' 角色与全部分支':' 角色与已探索场景';
+    el('view-title').textContent=state.search?'全局搜索':state.view==='characters'&&!modeFull()?'角色与已探索场景':viewNames[state.view];
+    el('global-search').placeholder=modeFull()?'搜索角色、选项、协议或台词…':'搜索已探索的人物、场景或记忆…';
+    el('global-search').setAttribute('aria-label',modeFull()?'搜索全部资料':'搜索已探索资料');
     el('view-code').textContent='ARCHIVE / '+String(Object.keys(viewNames).indexOf(state.view)+1).padStart(2,'0');
     el('mode-button').textContent=modeFull()?'▤ 全部剧透':'▣ 仅已探索';
     el('mode-button').style.background=modeFull()?'var(--accent)':'#c8d7b5';
@@ -464,7 +485,7 @@
     if(event.target.id==='native-cg-animation')sendHost('cgPlay',{name:event.target.value});
     if(event.target.id==='flow-scope'){state.flowScope=event.target.value;render();}
     if(event.target.id==='flow-node'){state.flowNode=event.target.value;state.flowScope='scene';render();}
-    if(event.target.id==='flow-file'){const g=D.groups.find(g=>g.id===state.character);const nodes=flowNodes(g).filter(n=>n.file===event.target.value);state.flowNode=(nodes.find(n=>n.options.length>=2)||nodes[0]).id;state.flowScope='scene';render();}
+    if(event.target.id==='flow-file'){const g=D.groups.find(g=>g.id===state.character);const nodes=flowSelection(g).nodes.filter(n=>n.file===event.target.value);state.flowNode=(nodes.find(n=>n.options.length>=2)||nodes[0]).id;state.flowScope='scene';render();}
     if(event.target.id==='condition-character'){state.character=event.target.value;state.page=0;render();}
     if(event.target.id==='condition-topic'){state.topic=event.target.value;state.page=0;render();}
   });

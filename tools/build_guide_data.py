@@ -3,6 +3,7 @@ from pathlib import Path
 import json,re,base64,io,collections,html,argparse
 from PIL import Image
 from curation import CHARACTER_NOTES,TIMELINE,ROUTES,NODE_LABELS,ACHIEVEMENTS,MECHANICS
+from scene_titles import assign_explored_titles
 
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--input-dir',type=Path,default=Path(__file__).parent)
@@ -112,11 +113,12 @@ for n in NODES:
         first=re.sub(r'^\w+[:：]\s*','',text[0]) if text else n['title']
         n['display']=(candidate if candidate and len(candidate)>6 else first)[:48] if first else n['title']
     n['opening']=safe_opening(n)
-    n['exploredTitle']=NODE_LABELS.get(n['label'],NODE_LABELS.get(n['title'],'')) or SOURCE_NAMES.get(n['group'],n['group'])+'：已到达的对话场景'
     n['incoming']=incoming[n['id']]
     n['visitKeys']=([n['title']+'.'+n['subtitle']] if n['when'] and n['subtitle'] else [n['title']] if not n['when'] else [])
     # 节点组本身的访问记录不足以证明访问了其某个匿名变体。
     n['ambiguousProgress']=bool(n['when'] and not n['subtitle'])
+
+assign_explored_titles(NODES,SOURCE_NAMES)
 
 for route in ROUTES:
     route['nodeIds']=refs(route['refs'])

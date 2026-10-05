@@ -114,6 +114,7 @@ namespace Graywill.InfantGodCodex
                     next = new Session { Pipe = new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous) };
                     session = next;
                     mode = ReadMode.Unselected;
+                    owner.Integration.ClearBackgroundPreview();
                     hasLayout = false;
                     Session captured = next;
                     Task.Run(() => ReadLoop(captured));
@@ -271,6 +272,7 @@ namespace Graywill.InfantGodCodex
             if (!owner.IsAvailable) return;
             switch (action)
             {
+                case "backgroundReady": owner.Integration.LoadBackgroundPreview(); break;
                 case "refreshProgress": owner.RefreshProgress(true); break;
                 case "exportProgress": owner.ExportProgress(); break;
                 case "toggle": owner.SetOpen(!owner.IsOpen || !owner.Integration.WindowShowing); break;
@@ -279,6 +281,7 @@ namespace Graywill.InfantGodCodex
                     string choice = (string)message["mode"];
                     if (choice != "all" && choice != "explored") return;
                     mode = choice == "all" ? ReadMode.Full : ReadMode.Explored;
+                    owner.Integration.ClearBackgroundPreview();
                     if (currentCG != null && !Visibility.CanSee(currentCG, mode, runtime.Current)) CloseCG();
                     break;
                 case "cgOpen": OpenCG((string)message["id"], (string)message["animation"]); break;

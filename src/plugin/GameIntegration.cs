@@ -84,6 +84,8 @@ namespace Graywill.InfantGodCodex
 
         internal void OpenWindow() { nativeWindow.Open(); }
         internal void CloseWindow() { nativeWindow.Close(); }
+        internal void LoadBackgroundPreview() { nativeWindow.LoadBackgroundPreview(Path.Combine(owner.DataPath, "webhost-profile", "background-preview.png")); }
+        internal void ClearBackgroundPreview() { nativeWindow.ClearBackgroundPreview(); }
 
         private static bool OpenDesktopEntry(ShortCut shortcut)
         {

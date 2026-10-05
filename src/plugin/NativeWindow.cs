@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Reflection;
 using FairyGUI;
 using InfantGod.Core.OSSystem;
@@ -16,6 +17,8 @@ namespace Graywill.InfantGodCodex
         private GComponent frame;
         private OSManager os;
         private GGraph clientBackground;
+        private GImage backgroundPreview;
+        private Texture2D previewTexture;
         private Rect restoredBounds;
         private bool standaloneMaximized;
         private bool usingOS;
@@ -55,7 +58,7 @@ namespace Graywill.InfantGodCodex
             object registry = os == null ? null : RegistryField.GetValue(os);
             if (registry != null)
             {
-                if (!usingOS && window != null && !window.isDisposed) { window.Dispose(); window = null; }
+                if (!usingOS && window != null && !window.isDisposed) { ClearBackgroundPreview(); window.Dispose(); window = null; }
                 var lookup = (IDictionary)LookupField.GetValue(registry);
                 if (!lookup.Contains(WindowName)) lookup.Add(WindowName, new WindowConfigEntry { windowName = WindowName, packageName = "Media", hideWhenClose = true });
                 usingOS = true;
@@ -127,6 +130,8 @@ namespace Graywill.InfantGodCodex
             clientBackground.DrawRect(client.width, client.height, 0, Color.clear, new Color32(229, 225, 181, 255));
             clientBackground.SetXY(client.x, client.y);
             pane.AddChildAt(clientBackground, 0);
+            backgroundPreview = new GImage { name = "InfantGodArchive_BackgroundPreview", touchable = false };
+            pane.AddChildAt(backgroundPreview, 1);
             pane.onSizeChanged.Add(ResizeClient);
             frame?.onSizeChanged.Add(ResizeClient);
             ResizeClient();
@@ -142,6 +147,39 @@ namespace Graywill.InfantGodCodex
             Rect client = ClientLocalBounds();
             clientBackground.SetXY(client.x, client.y);
             clientBackground.SetSize(client.width, client.height);
+            if (backgroundPreview != null)
+            {
+                backgroundPreview.SetXY(client.x, client.y);
+                backgroundPreview.SetSize(client.width, client.height);
+            }
+        }
+
+        internal void LoadBackgroundPreview(string path)
+        {
+            if (backgroundPreview == null || backgroundPreview.isDisposed || !File.Exists(path)) return;
+            ClearBackgroundPreview();
+            previewTexture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            if (!ImageConversion.LoadImage(previewTexture, File.ReadAllBytes(path)))
+            {
+                UnityEngine.Object.Destroy(previewTexture);
+                previewTexture = null;
+                return;
+            }
+            previewTexture.filterMode = FilterMode.Bilinear;
+            backgroundPreview.texture = new NTexture(previewTexture) { destroyMethod = DestroyMethod.None };
+            ResizeClient();
+        }
+
+        internal void ClearBackgroundPreview()
+        {
+            if (backgroundPreview != null && !backgroundPreview.isDisposed)
+            {
+                NTexture texture = backgroundPreview.texture;
+                backgroundPreview.texture = null;
+                texture?.Dispose();
+            }
+            if (previewTexture != null) UnityEngine.Object.Destroy(previewTexture);
+            previewTexture = null;
         }
 
         private Rect ClientLocalBounds()
@@ -237,6 +275,7 @@ namespace Graywill.InfantGodCodex
         public void Dispose()
         {
             Close();
+            ClearBackgroundPreview();
             window?.Dispose();
             window = null;
             frame = null;

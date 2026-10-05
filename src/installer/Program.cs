@@ -6,14 +6,14 @@ using System.Windows.Forms;
 [assembly: AssemblyTitle("幼神资料终端安装器")]
 [assembly: AssemblyProduct("InfantGod Archive")]
 [assembly: AssemblyCompany("Komeiji-Shiki / Graywill")]
-[assembly: AssemblyVersion("1.0.1.0")]
-[assembly: AssemblyFileVersion("1.0.1.0")]
+[assembly: AssemblyVersion("1.0.2.0")]
+[assembly: AssemblyFileVersion("1.0.2.0")]
 
 namespace Graywill.InfantGodInstaller
 {
     internal static class Program
     {
-        internal const string Version = "1.0.1";
+        internal const string Version = "1.0.2";
 
         [STAThread]
         private static void Main(string[] args)

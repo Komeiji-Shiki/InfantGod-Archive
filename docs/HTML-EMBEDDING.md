@@ -8,7 +8,7 @@
 - **WebView2 宿主**作为 Unity 窗口的子窗口显示 HTML，并处理浏览器的文字输入、页面布局和 JavaScript。
 - **网页**负责资料查询、分支图、人格台词、协议与 CG 界面。
 
-标题栏的拖动、最小化、最大化和关闭由游戏窗口管理器处理。窗口客户区的坐标与大小实时传给网页宿主；窗口隐藏或失去前台位置时，网页跟随隐藏。
+标题栏的拖动、最小化、最大化和关闭由游戏窗口管理器处理。窗口客户区的坐标与大小实时传给网页宿主。失焦时，宿主使用 WebView2 的 `CapturePreviewAsync` 保存当前页面，再隐藏交互窗口；插件把该页面绘制在原生窗口客户区中，因此其他游戏窗口可以正常遮挡它。重新聚焦时恢复可交互的网页。切换存档或查看范围时清除旧的背景预览。
 
 ## 存档与 CG
 
@@ -29,6 +29,7 @@ CG 使用独立的游戏相机和 RenderTexture 渲染，再把画面传给网�
 - [Microsoft：WinForms WebView2 入门](https://learn.microsoft.com/en-us/microsoft-edge/webview2/get-started/winforms)
 - [Microsoft：WebView2 宿主窗口](https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environment)
 - [Microsoft：宿主向页面发送 JSON](https://learn.microsoft.com/en-us/dotnet/api/microsoft.web.webview2.core.corewebview2.postwebmessageasjson)
+- [Microsoft：捕获 WebView2 当前页面](https://learn.microsoft.com/en-us/dotnet/api/microsoft.web.webview2.core.corewebview2.capturepreviewasync)
 - [gree/unity-webview：Windows 接入](https://github.com/gree/unity-webview/blob/master/plugins/Windows/README.md)
 - [WebViewToolkit](https://github.com/cantetfelix/WebViewToolkit)
 - [Vuplex StandaloneWebView](https://developer.vuplex.com/webview/StandaloneWebView)
