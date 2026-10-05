@@ -6,7 +6,7 @@
 
 ## 安装
 
-推荐从发布页下载独立的 `InfantGod-Archive-Setup-v1.0.4.exe`。它自带全部安装文件，双击后选择游戏目录并点击安装即可，也支持更新和卸载。
+推荐从发布页下载独立的 `InfantGod-Archive-Setup-v1.1.0.exe`。它自带全部安装文件，双击后选择游戏目录并点击安装即可，也支持更新和卸载。
 
 这个 ZIP 是手动安装包，不能把外层文件夹直接放进 `StreamingAssets/Mods`。手动安装时，将包内的 `BepInEx`、`Aistalt_Data`、`winhttp.dll`、`doorstop_config.ini` 和 `.doorstop_version` 复制到 `Aistalt.exe` 所在的 `Build` 目录并合并文件夹。需要自动备份时，关闭游戏，在解压目录用 PowerShell 执行：
 
@@ -29,6 +29,16 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Uninstall-Mod.ps1 -GamePat
 ```
 
 卸载会按安装记录恢复原文件或移除新增文件，并保留进度导出、配置、浏览器资料、日志和备份。
+
+## 爱式塔自由交谈与本机 MCP
+
+打开原作设置中的 **LLM** 页，自行填写 API 地址、模型名称、Key 和协议。支持 Chat Completions 与 Responses，基础页与高级参数页可填写采样参数、推理强度等请求 JSON 和自定义请求头。进入存档后按 **F9**，在原作爱式塔窗口中打字交流；模型可使用电脑界面、配装与已探索资料工具。点击“停止”或按 Esc 取消当前操作，发送新指令会中断旧请求。
+
+在 **LLM → 本机 MCP** 启用并保存后，可复制 Codex 命令或通用 stdio 配置，让其他本机客户端操作游戏。使用外部客户端不要求填写游戏内 API。
+
+**上下文** 页可查看实际输入、输出、缓存用量和预计上下文大小，并设置自动整理阈值或手动整理。原记录、玩家原话、操作记录和近期完整回合保留；模型可用历史工具回查。详细说明见随包的 `LIVE-CHAT.md`。
+
+Key 与请求头使用当前 Windows 用户的 DPAPI 加密，聊天记录与配置位于 `BepInEx/plugins/InfantGodArchive/livechat-data`。所有实际模型参数由玩家填写。
 
 ## 查看范围与 CG
 

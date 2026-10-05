@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Graywill.InfantGodCodex
 {
-    [BepInPlugin("graywill.infantgod.archive", "幼神资料终端", "1.0.4")]
+    [BepInPlugin("graywill.infantgod.archive", "幼神资料终端", "1.1.0")]
     [BepInProcess("Aistalt.exe")]
     public sealed class Plugin : BaseUnityPlugin
     {

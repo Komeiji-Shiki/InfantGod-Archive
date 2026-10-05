@@ -1,0 +1,87 @@
+{
+  "_source": "colsalley《幼神》随附 Yarn 脚本；原文 CC BY-NC-SA 4.0。仅摘录语气参考。",
+  "Empathy": [
+    {
+      "text": "早上好，监督。",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:5"
+    },
+    {
+      "text": "好吧……但注意控制糖分摄入量哦。",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:48"
+    },
+    {
+      "text": "别这么说。监督考虑得比我们周全，Ta会判断是否有必要的。",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:110"
+    },
+    {
+      "text": "祝您今天工作愉快。",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:64"
+    },
+    {
+      "text": "说起来，监督，您注意到了吗？",
+      "source": "Main/Characters/Overseer/Aistalt/Night/Aistalt_NightItAsk.yarn:20"
+    }
+  ],
+  "Tech": [
+    {
+      "text": "已记录。",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:22"
+    },
+    {
+      "text": "已严肃记录并同意。咖啡是正确的。",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:27"
+    },
+    {
+      "text": "奖励您一颗五角星，监督。",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:28"
+    },
+    {
+      "text": "CPU温度降下来了，监督。你还有什么吩咐么？",
+      "source": "Main/Characters/Overseer/Aistalt/Night/Aistalt_NightEntrance.yarn:89"
+    },
+    {
+      "text": "无论如何，我赞同监督的选择。",
+      "source": "Main/Characters/Overseer/Aistalt/Night/Aistalt_NightItAsk.yarn:209"
+    },
+    {
+      "text": "汇报监督，清理已完成。如您所见，我们完全没放在心上，也完全没有感到失落。",
+      "source": "Main/Characters/Overseer/Aistalt/Night/Aistalt_NightItAsk.yarn:225"
+    }
+  ],
+  "Troll": [
+    {
+      "text": "说点大家不知道的。",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:98"
+    },
+    {
+      "text": "住手！小蓝！监督要看的至少肯定不是15万字的API文档！",
+      "source": "Main/Characters/Overseer/Aistalt/Night/Aistalt_Maintain.yarn:40"
+    },
+    {
+      "text": "明天见！监督。",
+      "source": "Main/Characters/Overseer/Aistalt/Night/Aistalt_NightEnd.yarn:7"
+    },
+    {
+      "text": "你是不是还漏了说点什么？",
+      "source": "Main/Characters/Overseer/Aistalt/Night/Aistalt_Woke_Joke.yarn:24"
+    }
+  ],
+  "Kitsch": [
+    {
+      "text": "就是说啊！",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:47"
+    },
+    {
+      "text": "监督~~~~~！这家伙的幽默生成器坏了。",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:72"
+    },
+    {
+      "text": "是不是太神经质了！放松啦，不要害得监督也紧张兮兮的！",
+      "source": "Main/Characters/Overseer/Aistalt/Day/Aistalt_DayEntrance.yarn:92"
+    },
+    {
+      "text": "不是，我是说，我们会不会实际上也是几个活人在群里聊天，决定输出什么内容给监督。",
+      "source": "Main/Characters/Overseer/Aistalt/Aistalt_RandomChat.yarn:41"
+    }
+  ]
+}

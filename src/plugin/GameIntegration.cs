@@ -128,13 +128,13 @@ namespace Graywill.InfantGodCodex
             owner.SetAvailable(enabled);
             if (!enabled) RemoveDesktopEntry();
             nextDesktopProbe = 0;
-            if (menuEntry != null) menuEntry.visible = enabled && (!owner.IsOpen || !nativeWindow.IsShowing);
+            if (menuEntry != null) menuEntry.visible = enabled && !owner.NativeSettingsVisible && (!owner.IsOpen || !nativeWindow.IsShowing);
         }
 
         internal void Tick()
         {
             if (IsEnabled) UpdateMenuEntry();
-            if (menuEntry != null) menuEntry.visible = IsEnabled && (!owner.IsOpen || !nativeWindow.IsShowing);
+            if (menuEntry != null) menuEntry.visible = IsEnabled && !owner.NativeSettingsVisible && (!owner.IsOpen || !nativeWindow.IsShowing);
             if (!IsEnabled || Time.unscaledTime < nextDesktopProbe) return;
             nextDesktopProbe = Time.unscaledTime + 1;
             if (shortcuts == null) shortcuts = UnityEngine.Object.FindObjectOfType<ShortCutManager>();
