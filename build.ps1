@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)][string]$GamePath,
     [string]$OutputPath=(Join-Path $PSScriptRoot 'dist\InfantGod-Archive-Mod')
 )
@@ -16,6 +16,8 @@ if ($LASTEXITCODE -ne 0) { throw '离线资料页生成失败。' }
     -HtmlPath $taskHtml `
     -OutputPath $OutputPath
 if ($LASTEXITCODE -ne 0) { throw '插件生成失败。' }
+& python (Join-Path $PSScriptRoot 'src\webhost\build.py') --output (Join-Path $OutputPath 'BepInEx\plugins\InfantGodArchive\webhost')
+if ($LASTEXITCODE -ne 0) { throw '网页宿主生成失败。' }
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'LICENSE') -Destination $OutputPath -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'licenses\OFL-1.1.txt') -Destination (Join-Path $OutputPath 'LICENSES\FusionPixel-OFL.txt') -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'src\web\vendor\LICENSE') -Destination (Join-Path $OutputPath 'LICENSES\Dagre-MIT.txt') -Force

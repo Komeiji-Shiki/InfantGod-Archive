@@ -1,0 +1,10 @@
+原作：Infant God（幼神）
+作者：colsalley
+来源：https://store.steampowered.com/app/4238140/_/
+原作导出内容许可：Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International（CC BY-NC-SA 4.0）
+许可地址：https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+幼神资料终端的剧情整理、HTML 程序与插件源码由本项目制作方编写。
+原创插件、网页程序和构建工具采用 MIT 开源许可。
+原作派生的剧情资料、整理与授权资产按 CC BY-NC-SA 4.0 分享，保持署名、非商业及相同许可。
+第三方加载器与组件保留其各自许可证和署名，见 THIRD-PARTY-NOTICES.md 与 LICENSES。

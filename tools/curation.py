@@ -39,7 +39,7 @@ TIMELINE = [
  (5,'绿色先锋与角色后果','绿色先锋会在直播进程中介入。向西、投降和返回战场的逃兵后续从第 5 天起分别满足日期门槛。未自证清白时还会生成反 AI 相关场景物件。',['Entry_Greenguard_1','Entry_BotChecker.three_main','Entry_BotChecker.three_commi','Entry_BotChecker.three_war']),
  (6,'最后的整理机会','清理反 AI 场景物件；荒域逃兵与政委录像从这一天起可出现。夜间是否已与阿尔娃完成解释和协商，将直接影响第 7 天的开场。',['Entry_BotChecker.three_arid','Entry_Commissar','Greta_2_Pretalk_Entry']),
  (7,'辩论、磋商与大选','顺序固定为阿尔娃、党派人物、战争相关人物。阿尔娃线可以进入公开交锋、案件自证或友善磋商；多个神性觉醒在这些路径中发生。',['Entry_Greta_3','Greta_3_Special_Hub','Greta_3_End_Entry','CG_TheAssault']),
- (8,'洪水行动与 Demo 收束','新闻更新并进入 Demo 结束对话。“洪水行动”是此版本的固定世界事件；',['Welcome_Node']),
+ (8,'洪水行动与 Demo 收束','新闻更新并进入 Demo 结束对话。“洪水行动”是此版本的固定世界事件。',['Welcome_Node']),
 ]
 
 ROUTES = [

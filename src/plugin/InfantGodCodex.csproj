@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>Graywill.InfantGodCodex</AssemblyName>
+    <RootNamespace>Graywill.InfantGodCodex</RootNamespace>
+    <Version>1.0.0</Version>
+    <GameManagedPath Condition="'$(GameManagedPath)' == ''">$(GamePath)\Aistalt_Data\Managed</GameManagedPath>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <RestorePackagesPath>$(MSBuildThisFileDirectory)deps\nuget</RestorePackagesPath>
+    <RestoreSources>$(MSBuildThisFileDirectory)deps\feed</RestoreSources>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BepInEx"><HintPath>deps\bepinex\BepInEx\core\BepInEx.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="0Harmony"><HintPath>deps\bepinex\BepInEx\core\0Harmony.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="InfantGod"><HintPath>$(GameManagedPath)\InfantGod.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Newtonsoft.Json"><HintPath>$(GameManagedPath)\Newtonsoft.Json.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="FairyGUI"><HintPath>$(GameManagedPath)\FairyGUI.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(GameManagedPath)\UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(GameManagedPath)\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.AssetBundleModule"><HintPath>$(GameManagedPath)\UnityEngine.AssetBundleModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.IMGUIModule"><HintPath>$(GameManagedPath)\UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.InputLegacyModule"><HintPath>$(GameManagedPath)\UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.ImageConversionModule"><HintPath>$(GameManagedPath)\UnityEngine.ImageConversionModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.TextRenderingModule"><HintPath>$(GameManagedPath)\UnityEngine.TextRenderingModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.AudioModule"><HintPath>$(GameManagedPath)\UnityEngine.AudioModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="spine-unity"><HintPath>$(GameManagedPath)\spine-unity.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="spine-csharp"><HintPath>$(GameManagedPath)\spine-csharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="YarnSpinner.Unity"><HintPath>$(GameManagedPath)\YarnSpinner.Unity.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>

@@ -22,5 +22,8 @@ InfantGod Archive / 幼神资料终端
 5. BepInEx、Doorstop、Harmony、MonoMod、Mono.Cecil 等第三方组件保留其原许可，
    详见 src/plugin/THIRD-PARTY-NOTICES.md。游戏运行库不作为本项目源码依赖文件分发。
 
+6. Microsoft WebView2 SDK 组件保留微软的版权声明和许可。
+   许可证随发布包的 BepInEx/plugins/InfantGodArchive/webhost/WebView2-LICENSE.txt 提供。
+
 本项目为非官方 Mod。原作者不为本 Mod 的修改与运行结果负责。
 

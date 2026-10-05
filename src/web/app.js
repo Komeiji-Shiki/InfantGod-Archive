@@ -2,13 +2,16 @@
 (() => {
   'use strict';
   const D = JSON.parse(document.getElementById('archive-data').textContent);
+  const isEmbedded=Boolean(window.chrome?.webview&&new URLSearchParams(location.search).has('embedded'));
   const byId = new Map(D.nodes.map(n => [n.id, n]));
   const topics = new Map(D.definitions.Topic.map(t => [t._id, t]));
   const memories = new Map(D.definitions.Memory.map(m => [m._id, m]));
   const protocolMap = new Map(D.definitions.Protocol.map(p => [p._id, p]));
   const names = { ...D.names, Days: '日程', System: '公共系统', Ends: '结局草稿', Empathy: '共情', Tech: '技术', Troll: '键政', Kitsch: '媚俗' };
   const viewNames = { overview:'总览与时间线', routes:'关键剧情路线', characters:'角色与全部分支', thresholds:'条件与检定', protocols:'协议与记忆', collections:'成就与 CG', world:'世界资料', mod:'Mod 与资料来源' };
-  const state = { view:'overview', mode:null, progress:null, visited:new Set(), dev:false, search:'', character:'Greta', page:0, filter:'', topic:'all', kind:'all', collectionTab:'achievements', protocolTab:'Protocol', thresholdTab:'conditions', worldType:'News', nodeHistory:[],persona:'all',characterView:'flow',flowNode:'',flowScope:'scene',flowExpanded:false,flowHistory:[],flowForward:[],flowViewport:null };
+  const state = { view:'overview', mode:null, progress:null, visited:new Set(), dev:false, search:'', character:'Greta', page:0, filter:'', topic:'all', kind:'all', collectionTab:'achievements', protocolTab:'Protocol', thresholdTab:'conditions', worldType:'News', nodeHistory:[],persona:'all',characterView:'flow',flowNode:'',flowScope:'scene',flowExpanded:false,flowHistory:[],flowForward:[],flowViewport:null,currentImage:null,nativeCGPaused:false,nativeCGAnimations:'',progressStamp:'' };
+  let pendingHostRender=false;
+  function sendHost(action,data={}){if(isEmbedded)window.chrome.webview.postMessage({type:'action',action,...data});}
   const personas={Empathy:'共情',Tech:'技术',Troll:'键政',Kitsch:'媚俗'};
   const el = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -256,7 +259,10 @@
     for(const n of D.nodes.filter(nodeAllowed)){
       const text=modeFull()?n.raw:brief(n);
       if(matches(visibleTitle(n)+' '+n.label+' '+text+' '+label(n.group),q)){
-        let at=lower(text).indexOf(lower(q));let snippet=cleanText(text.slice(Math.max(0,at-50),Math.max(0,at)+190));
+        // 先整理完整台词，再截取摘要，避免把脚本指令截断后显示给玩家。
+        const readable=text.split('\n').map(row=>cleanText(row.trim()).replace(/^(?:->|=>)\s*/,'').replace(/^(\w+):\s*/,(_,id)=>label(id)+'：')).filter(Boolean).join(' ');
+        const at=Math.max(0,lower(readable).indexOf(lower(q))),start=Math.max(0,at-45);
+        const snippet=(start?'…':'')+readable.slice(start,at+190)+(at+190<readable.length?'…':'');
         rows.push({title:visibleTitle(n),type:label(n.group)+' · 剧情',text:snippet,action:`data-node="${n.id}"`});
       }
     }
@@ -268,6 +274,7 @@
   }
 
   function render(){
+    pendingHostRender=false;
     document.querySelectorAll('[data-view]').forEach(btn=>btn.classList.toggle('active',btn.dataset.view===state.view));
     el('view-title').textContent=state.search?'全局搜索':viewNames[state.view];
     el('view-code').textContent='ARCHIVE / '+String(Object.keys(viewNames).indexOf(state.view)+1).padStart(2,'0');
@@ -275,7 +282,7 @@
     el('mode-button').style.background=modeFull()?'var(--accent)':'#c8d7b5';
     el('scope-note').hidden=modeFull()||!state.mode;
     el('scope-note').textContent=state.progress?`已探索模式 · 第 ${state.progress.day ?? '?'} 天 · 已载入 ${state.visited.size} 条访问记录。`:'已探索模式 · 尚未导入快照。请用游戏内 Mod 导出 progress.json 后导入。';
-    el('progress-info').textContent=state.progress?`快照：第 ${state.progress.day ?? '?'} 天 / ${state.progress.exportedAt?.replace('T',' ').slice(0,19)||'未提供时间'}`:'全部内容保存在本文件内。断网也能查阅。';
+    el('progress-info').textContent=state.progress?(isEmbedded?`当前存档 ${Number(state.progress.slotId)+1} · 第 ${state.progress.day} 天 · ${String(state.progress.hour).padStart(2,'0')}:${String(state.progress.minute).padStart(2,'0')}`:`快照：第 ${state.progress.day ?? '?'} 天 / ${state.progress.exportedAt?.replace('T',' ').slice(0,19)||'未提供时间'}`):(isEmbedded?'等待进入存档。':'全部内容保存在本文件内。断网也能查阅。');
     const views={overview:renderOverview,routes:renderRoutes,characters:renderCharacters,thresholds:renderThresholds,protocols:renderProtocols,collections:renderCollections,world:renderWorld,mod:renderMod};
     el('content').innerHTML=state.search?renderSearch():views[state.view]();
     mountFlowchart();
@@ -344,13 +351,56 @@
   }
   function openImage(id,background=false){
     const g=(background?D.backgrounds:D.gallery).find(x=>x.id===id);if(!g||!modeFull()&&(background||!cgKnown(g))){toast('这个画面尚未开放。');return;}
+    state.currentImage=background?null:g;state.nativeCGPaused=false;state.nativeCGAnimations='';
     el('image-title').textContent=g.title;
-    el('image-content').innerHTML=`<div class="image-view"><img src="${g.image}" alt="${esc(g.title)}"></div><div class="image-meta"><p>${esc(g.description||g.source)}</p>${g.width?`<span class="tiny">原始像素 ${g.width} × ${g.height} · ${esc(g.cgKey)} · ${esc(g.region)}</span>`:''}${g.triggers?.length&&modeFull()?`<details><summary>查看实际触发位置</summary>${g.triggers.map(t=>`${conditionList(t.conditions)}${nodeLinks([t.id])}`).join('')}</details>`:''}</div>`;
+    el('image-content').innerHTML=`<div class="image-view"><img id="cg-display" src="${g.image}" alt="${esc(g.title)}"></div>${isEmbedded&&!background?'<div class="native-cg-controls"><button data-action="native-cg-play">播放动画</button><button data-action="native-cg-pause" hidden>暂停</button><label id="native-cg-animation-label" hidden>动画<select id="native-cg-animation" aria-label="选择CG动画"></select></label><label>缩放<input type="range" id="native-cg-zoom" min="0.5" max="2.5" step="0.05" value="1"></label></div>':''}<div class="image-meta"><p>${esc(g.description||g.source)}</p>${g.triggers?.length&&modeFull()?`<details><summary>触发场景</summary>${g.triggers.map(t=>`${conditionList(t.conditions)}${nodeLinks([t.id])}`).join('')}</details>`:''}</div>`;
     el('image-dialog').showModal();
+    if(isEmbedded&&!background)sendHost('cgOpen',{id:g.cgKey,animation:g.region});
+  }
+
+  function receiveHostProgress(message){
+    const next=message.ready?message.data:null;
+    if(next&&(next.format!=='infantgod-progress-v1'||next.schemaVersion!==1))return;
+    const stamp=JSON.stringify(next?{...next,exportedAt:undefined}:null);
+    if(stamp===state.progressStamp)return;
+    const previous=state.progress;const changedSave=previous&&(!next||previous.slotId!==next.slotId||previous.day>next.day||previous.visitedNodes.some(id=>!next.visitedNodes.includes(id)));
+    state.progressStamp=stamp;state.progress=next;state.visited=new Set(next?.visitedNodes||[]);
+    if(changedSave){
+      state.flowHistory=[];state.flowForward=[];state.flowViewport=null;
+      if(el('detail-dialog').open)el('detail-dialog').close();if(el('image-dialog').open)el('image-dialog').close();
+      state.currentNode=null;state.currentImage=null;sendHost('cgClose');
+    }
+    if(!state.mode)return;
+    if(!changedSave&&['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){pendingHostRender=true;return;}
+    if(state.view==='characters'&&state.characterView==='flow')state.flowViewport=window.ArchiveFlow.snapshot();
+    render();
+  }
+  function receiveCGFrame(message){
+    if(!message.id){
+      const play=document.querySelector('[data-action="native-cg-play"]');if(play)play.hidden=false;
+      const pause=document.querySelector('[data-action="native-cg-pause"]');if(pause)pause.hidden=true;
+      const preview=el('cg-display');if(preview&&state.currentImage)preview.src=state.currentImage.image;
+      const animations=el('native-cg-animation-label');if(animations)animations.hidden=true;
+      state.nativeCGAnimations='';state.nativeCGPaused=false;
+      return;
+    }
+    if(!el('image-dialog').open||state.currentImage?.cgKey!==message.id||!message.image)return;
+    el('cg-display').src=message.image;
+    const animations=message.animations||[],key=animations.join('\n');
+    if(key!==state.nativeCGAnimations){
+      state.nativeCGAnimations=key;
+      el('native-cg-animation').innerHTML=animations.map(name=>`<option value="${esc(name)}">${esc(name)}</option>`).join('');
+      el('native-cg-animation-label').hidden=animations.length<2;
+    }
+    if(message.currentAnimation)el('native-cg-animation').value=message.currentAnimation;
+    state.nativeCGPaused=Boolean(message.paused);
+    const pause=document.querySelector('[data-action="native-cg-pause"]');pause.hidden=animations.length===0;pause.textContent=state.nativeCGPaused?'继续播放':'暂停';
+    document.querySelector('[data-action="native-cg-play"]').hidden=true;
   }
 
   function selectMode(mode){
     state.mode=mode;state.page=0;state.filter='';state.search='';el('global-search').value='';
+    sendHost('setMode',{mode});
     state.flowHistory=[];state.flowForward=[];state.flowViewport=null;
     if(el('mode-dialog').open)el('mode-dialog').close();
     if(el('detail-dialog').open)el('detail-dialog').close();if(el('image-dialog').open)el('image-dialog').close();
@@ -384,6 +434,8 @@
     for(const [attr,key] of [['protocolTab','protocolTab'],['thresholdTab','thresholdTab'],['collectionTab','collectionTab'],['worldType','worldType'],['characterView','characterView'],['persona','persona']])if(target.dataset[attr]){state[key]=target.dataset[attr];state.page=0;state.filter='';render();return;}
     if(target.dataset.action==='close-detail'){el('detail-dialog').close();state.nodeHistory=[];state.currentNode=null;}
     if(target.dataset.action==='close-image')el('image-dialog').close();
+    if(target.dataset.action==='native-cg-play'&&state.currentImage)sendHost('cgOpen',{id:state.currentImage.cgKey,animation:state.currentImage.region});
+    if(target.dataset.action==='native-cg-pause')sendHost('cgPause',{paused:!state.nativeCGPaused});
     if(target.dataset.action==='back-node'){const id=state.nodeHistory.pop();if(id)openNode(id,false);}
     if(target.dataset.action==='import-progress')el('progress-file').click();
   });
@@ -406,8 +458,10 @@
     if(event.target.id==='global-search')queueSearch(event.target);
     if(event.target.id==='local-filter')queueFilter(event.target);
     if(event.target.id.startsWith('calc-'))updateCalculator();
+    if(event.target.id==='native-cg-zoom')sendHost('cgZoom',{value:Number(event.target.value)});
   });
   document.addEventListener('change',event=>{
+    if(event.target.id==='native-cg-animation')sendHost('cgPlay',{name:event.target.value});
     if(event.target.id==='flow-scope'){state.flowScope=event.target.value;render();}
     if(event.target.id==='flow-node'){state.flowNode=event.target.value;state.flowScope='scene';render();}
     if(event.target.id==='flow-file'){const g=D.groups.find(g=>g.id===state.character);const nodes=flowNodes(g).filter(n=>n.file===event.target.value);state.flowNode=(nodes.find(n=>n.options.length>=2)||nodes[0]).id;state.flowScope='scene';render();}
@@ -416,12 +470,23 @@
   });
   el('show-dev').addEventListener('change',e=>{state.dev=e.target.checked;state.page=0;render();});
   el('mode-button').addEventListener('click',()=>el('mode-dialog').showModal());
-  el('import-button').addEventListener('click',()=>el('progress-file').click());
+  el('import-button').addEventListener('click',()=>isEmbedded?sendHost('refreshProgress'):el('progress-file').click());
+  el('image-dialog').addEventListener('close',()=>{state.currentImage=null;sendHost('cgClose');});
+  document.addEventListener('focusout',()=>{if(pendingHostRender)setTimeout(()=>{if(pendingHostRender&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))render();},0);});
   el('progress-file').addEventListener('change',e=>importProgress(e.target.files[0]));
   el('mode-dialog').addEventListener('cancel',e=>{if(!state.mode)e.preventDefault();});
   document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)&&!document.querySelector('dialog[open]')){e.preventDefault();el('global-search').focus();}});
   window.addEventListener('hashchange',()=>{const [view,id]=location.hash.slice(1).split('/');if(view==='node'&&id)openNode(id);else if(viewNames[view])navigate(view,id?{character:id}:{});});
   const initial=location.hash.slice(1).split('/');if(viewNames[initial[0]])state.view=initial[0];if(initial[1])state.character=initial[1];
+  if(isEmbedded){
+    document.documentElement.classList.add('embedded');
+    el('connection-label').textContent='GAME ARCHIVE';
+    el('import-button').textContent='同步当前进度';
+    const exportButton=document.createElement('button');exportButton.className='subtle-button';exportButton.textContent='导出进度';exportButton.addEventListener('click',()=>sendHost('exportProgress'));el('import-button').after(exportButton);
+    const explored=el('mode-dialog').querySelector('[data-mode="explored"] span:not(.mode-icon)');if(explored)explored.textContent='查看当前存档中已到达的场景、记忆与 CG。';
+    window.chrome.webview.addEventListener('message',event=>{const message=event.data;if(message?.type==='progress')receiveHostProgress(message);else if(message?.type==='cgFrame')receiveCGFrame(message);else if(message?.type==='notice')toast(message.text);});
+    sendHost('ready');
+  }
   // 选择模式前不渲染任何剧情内容，防止首屏短暂泄露。
   el('content').innerHTML=empty('资料终端已就绪','请选择查阅范围。');
   el('mode-dialog').showModal();

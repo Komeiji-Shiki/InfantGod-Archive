@@ -11,6 +11,9 @@ dist/
 **/*.es3
 **/*.pdb
 **/*.dll
+**/webhost-profile/
+**/webhost-session*.json
+**/*.log
 !media/*.png
 .InfantGodArchive-*
 media/.render/

@@ -14,13 +14,13 @@ python tools/build_web.py
 
 ## 构建完整 Mod 包
 
-需要 .NET SDK、Python 3，以及本机安装的 Windows Mono 版《幼神 Demo》。
+需要 .NET SDK、Windows .NET Framework 4.8、Python 3，以及本机安装的 Windows Mono 版《幼神 Demo》。
 
 ```powershell
 .\build.ps1 -GamePath '你的幼神 Demo\Build'
 ```
 
-输出为 `dist/InfantGod-Archive-Mod`。首次构建从官方发布源下载固定版本的 BepInEx 5.4.23.5；后续使用缓存。游戏程序集只作为本机编译引用，不复制到发布包。
+输出为 `dist/InfantGod-Archive-Mod`。首次构建从官方发布源下载 BepInEx 5.4.23.5 和 Microsoft.Web.WebView2 SDK 1.0.4191.47；后续使用缓存。游戏程序集作为本机编译引用。运行游戏内网页还需要 Microsoft Edge WebView2 Runtime。
 
 ## 更新资料快照
 
@@ -32,7 +32,7 @@ python tools/extract_game.py --game-path '你的幼神 Demo\Build' --output-dir 
 python tools/build_guide_data.py --input-dir .work/data --plugin-dir .work/plugin-assets
 ```
 
-这三步依次生成中文名称表、剧情结构索引和共用资料。`guide-data.json` 对应网页，`mod-catalog.json` 对应原生面板，`previews` 与 `portraits` 是所需资产。更新仓库前，应将本机路径从 `modGuide` 中移除，并复核 `tools/curation.py` 的人工导读是否仍与新版剧情一致。
+这三步依次生成中文名称表、剧情结构索引和共用资料。用 `guide-data.json` 更新 `data/archive.json`，保留现有的署名与字体许可字段；用 `mod-catalog.json` 更新 `data/catalog.json`。将 `.work/plugin-assets/previews` 和 `portraits` 分别复制到 `assets/cg` 与 `assets/portraits`，然后重新构建。资料生成过程会移除本机的 `sourceRoot` 路径。更新游戏版本时，也需要复核 `tools/curation.py` 的人工导读。
 
 ## 分支图的含义
 
