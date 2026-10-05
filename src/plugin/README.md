@@ -6,7 +6,7 @@
 
 ## 安装
 
-推荐从发布页下载独立的 `InfantGod-Archive-Setup-v1.0.4.exe`。它自带全部安装文件，双击后选择游戏目录并点击安装即可，也支持更新和卸载。
+推荐从发布页下载独立的 `InfantGod-Archive-Setup-v1.0.5.exe`。它自带全部安装文件，双击后选择游戏目录并点击安装即可，也支持更新和卸载。
 
 这个 ZIP 是手动安装包，不能把外层文件夹直接放进 `StreamingAssets/Mods`。手动安装时，将包内的 `BepInEx`、`Aistalt_Data`、`winhttp.dll`、`doorstop_config.ini` 和 `.doorstop_version` 复制到 `Aistalt.exe` 所在的 `Build` 目录并合并文件夹。需要自动备份时，关闭游戏，在解压目录用 PowerShell 执行：
 
@@ -16,7 +16,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Install-Mod.ps1 -GamePath 
 
 `GamePath` 是包含 `Aistalt.exe` 的目录。安装脚本会为覆盖的文件创建备份，已有 BepInEx 5 时复用加载器；更新或继续中断的安装时，保留首次安装前的备份。
 
-安装完成后，启动游戏，在 **设置 → Mod 管理器** 中启用 **幼神资料终端**。随后可点击主菜单右上角的资料入口、进入存档后双击 OS 桌面的 **资料终端**，或按 **F8** 打开。标题栏可拖动，`_` 最小化，`□` 最大化或还原，`×` 关闭；F8 也可关闭当前资料窗。
+安装完成后，启动游戏，在 **设置 → Mod 管理器** 中启用 **幼神资料终端**。随后可点击主菜单中的“资料终端”按钮、进入存档后双击 OS 桌面的 **资料终端**，或按 **F8** 打开。标题栏可拖动，`_` 最小化，`□` 最大化或还原，`×` 关闭；F8 也可关闭当前资料窗。
 
 正式 Mod 条目位于 `Aistalt_Data/StreamingAssets/Mods/InfantGodArchive/mod.json`。在 Mod 管理器中停用资料终端后，窗口关闭，菜单入口和桌面快捷方式移除；重新启用后恢复。
 

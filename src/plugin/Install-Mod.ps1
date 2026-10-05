@@ -55,7 +55,7 @@ if ($taskExisting) {
         $taskRecorded.Add([string]$taskRecord.path) | Out-Null
     }
 }
-$taskState = [ordered]@{ status='Installing'; version='1.0.4'; gameRoot=$taskGameRoot; backupRoot=$taskBackupRoot; reusedBepInEx=(-not $taskOwnsLoader); files=$taskRecords }
+$taskState = [ordered]@{ status='Installing'; version='1.0.5'; gameRoot=$taskGameRoot; backupRoot=$taskBackupRoot; reusedBepInEx=(-not $taskOwnsLoader); files=$taskRecords }
 New-Item -ItemType Directory -Path $taskBackupRoot -Force | Out-Null
 try {
     foreach ($taskRelative in $taskFiles) {
@@ -84,6 +84,6 @@ try {
 }
 Write-Output "资料终端已安装：$taskGameRoot"
 Write-Output '启动游戏，先在“设置 → Mod 管理器”中启用“幼神资料终端”。'
-Write-Output '启用后可点击主菜单右上角入口、游戏桌面的“资料终端”，或按 F8 打开。'
+Write-Output '启用后可点击主菜单中的“资料终端”按钮、游戏桌面的“资料终端”，或按 F8 打开。'
 Write-Output '第一次打开时选择已探索内容或全剧透资料，游戏内会自动同步当前存档进度。'
 Write-Output "原文件备份：$taskBackupRoot"

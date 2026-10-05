@@ -20,9 +20,7 @@ namespace Graywill.InfantGodCodex
         private readonly ArchiveHost owner;
         private readonly Harmony hooks;
         private readonly NativeWindow nativeWindow;
-        private GButton menuEntry;
-        private GGraph menuBackground;
-        private GTextField menuText;
+        private readonly NativeArchiveMenuEntry menuEntry;
         private ShortCut desktopEntry;
         private ShortCutManager shortcuts;
         private Texture2D iconTexture;
@@ -38,6 +36,7 @@ namespace Graywill.InfantGodCodex
         {
             this.owner = owner;
             nativeWindow = new NativeWindow(owner);
+            menuEntry = new NativeArchiveMenuEntry(owner);
             hooks = new Harmony("graywill.infantgod.archive.integration");
             hooks.Patch(AccessTools.Method(typeof(OSManager), "OnShortcutActivated"), prefix: new HarmonyMethod(typeof(GameIntegration), nameof(OpenDesktopEntry)));
             hooks.Patch(AccessTools.Method(typeof(ShortCutManager), "CreateSaveData"), postfix: new HarmonyMethod(typeof(GameIntegration), nameof(ExcludeRuntimeShortcut)));
@@ -128,13 +127,12 @@ namespace Graywill.InfantGodCodex
             owner.SetAvailable(enabled);
             if (!enabled) RemoveDesktopEntry();
             nextDesktopProbe = 0;
-            if (menuEntry != null) menuEntry.visible = enabled && (!owner.IsOpen || !nativeWindow.IsShowing);
+            menuEntry.Update(enabled);
         }
 
         internal void Tick()
         {
-            if (IsEnabled) UpdateMenuEntry();
-            if (menuEntry != null) menuEntry.visible = IsEnabled && (!owner.IsOpen || !nativeWindow.IsShowing);
+            menuEntry.Update(IsEnabled);
             if (!IsEnabled || Time.unscaledTime < nextDesktopProbe) return;
             nextDesktopProbe = Time.unscaledTime + 1;
             if (shortcuts == null) shortcuts = UnityEngine.Object.FindObjectOfType<ShortCutManager>();
@@ -156,40 +154,6 @@ namespace Graywill.InfantGodCodex
             desktopEntry.nameKey = "InfantGodArchive/Name";
             desktopEntry.windowName = NativeWindow.WindowName;
             desktopEntry.icon = iconSprite;
-        }
-
-        private void UpdateMenuEntry()
-        {
-            if (GRoot.inst == null) return;
-            if (menuEntry == null || menuEntry.isDisposed)
-            {
-                // 主菜单尚未创建 OSManager，先按原生流程加载按钮所属的界面包。
-                if (UIPackage.GetByName("OS") == null && UIPackage.AddPackage("FairyGUI/UI/OS") == null) return;
-                GObject created = UIPackage.CreateObject("OS", "Button_Menu");
-                if (created == null) return;
-                menuEntry = created.asButton;
-                if (menuEntry == null) { created.Dispose(); return; }
-                menuEntry.name = "InfantGodArchive_MenuEntry";
-                menuEntry.opaque = true;
-                menuEntry.sortingOrder = 32766;
-                menuEntry.SetSize(166, 46);
-                menuBackground = new GGraph { touchable = false };
-                menuBackground.DrawRect(166, 46, 2, new Color32(245, 141, 60, 255), new Color32(42, 48, 46, 255));
-                menuEntry.AddChild(menuBackground);
-                menuText = new GTextField { touchable = false, align = AlignType.Center, verticalAlign = VertAlignType.Middle };
-                menuText.SetSize(166, 46);
-                menuText.text = owner.OpenKey.Value + "  资料终端";
-                var textFormat = menuText.textFormat;
-                textFormat.font = UIConfig.defaultFont;
-                textFormat.size = 20;
-                textFormat.color = new Color32(229, 225, 181, 255);
-                menuText.textFormat = textFormat;
-                menuEntry.AddChild(menuText);
-                menuEntry.onClick.Add(() => owner.SetOpen(true));
-                GRoot.inst.AddChild(menuEntry);
-            }
-            if (menuEntry.parent != GRoot.inst) GRoot.inst.AddChild(menuEntry);
-            menuEntry.SetXY(Math.Max(12, GRoot.inst.width - 184), 24);
         }
 
         private void RemoveDesktopEntry()
