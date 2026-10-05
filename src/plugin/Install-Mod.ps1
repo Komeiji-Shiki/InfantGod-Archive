@@ -5,10 +5,13 @@ $taskGameRoot = [IO.Path]::GetFullPath($GamePath).TrimEnd('\')
 $taskRootPrefix = $taskGameRoot + '\'
 if (-not (Test-Path -LiteralPath (Join-Path $taskGameRoot 'Aistalt.exe'))) { throw '请指定包含 Aistalt.exe 的幼神 Build 目录。' }
 if (Get-Process -Name 'Aistalt' -ErrorAction SilentlyContinue) { throw '请先关闭幼神，再重新运行安装脚本。' }
+. (Join-Path $PSScriptRoot 'Installer-Common.ps1')
+Stop-ArchiveWebHost -GameRoot $taskGameRoot
 $taskStatePath = Join-Path $taskGameRoot '.InfantGodArchive-install.json'
+$taskExisting = $null
 if (Test-Path -LiteralPath $taskStatePath) {
     $taskExisting = Get-Content -LiteralPath $taskStatePath -Raw -Encoding UTF8 | ConvertFrom-Json
-    if ($taskExisting.status -eq 'Installed') { throw '资料终端已经由本脚本安装，请先运行卸载脚本后再安装新版本。' }
+    if ($taskExisting.status -eq 'Uninstalled') { $taskExisting = $null }
 }
 
 $taskPackageRoot = $PSScriptRoot
@@ -31,28 +34,43 @@ $taskSourceNative = Join-Path $taskPackageRoot $taskNativeRelative
 foreach ($taskFile in (Get-ChildItem -LiteralPath $taskSourceNative -Recurse -File)) {
     $taskFiles.Add($taskNativeRelative + '\' + $taskFile.FullName.Substring($taskSourceNative.Length + 1))
 }
-if (-not $taskAlreadyHasLoader) {
+$taskOwnsLoader = -not $taskAlreadyHasLoader
+if ($taskExisting) { $taskOwnsLoader = -not $taskExisting.reusedBepInEx }
+if ($taskOwnsLoader) {
     foreach ($taskFile in (Get-ChildItem -LiteralPath (Join-Path $taskPackageRoot 'BepInEx\core') -Recurse -File)) {
         $taskFiles.Add('BepInEx\core\' + $taskFile.FullName.Substring((Join-Path $taskPackageRoot 'BepInEx\core').Length + 1))
     }
     foreach ($taskRelative in @('winhttp.dll', 'doorstop_config.ini', '.doorstop_version')) { $taskFiles.Add($taskRelative) }
 }
 
-$taskBackupRoot = Join-Path $taskGameRoot ('.InfantGodArchive-backup-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
+$taskBackupRoot = Join-Path $taskGameRoot ('.InfantGodArchive-backup-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff'))
 $taskRecords = [Collections.Generic.List[object]]::new()
-$taskState = [ordered]@{ status='Installing'; version='1.0.0'; gameRoot=$taskGameRoot; backupRoot=$taskBackupRoot; reusedBepInEx=$taskAlreadyHasLoader; files=$taskRecords }
+$taskRecorded = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+if ($taskExisting) {
+    $taskBackupRoot = [IO.Path]::GetFullPath([string]$taskExisting.backupRoot)
+    if (-not $taskBackupRoot.StartsWith($taskRootPrefix, [StringComparison]::OrdinalIgnoreCase)) { throw '备份目录不属于指定的游戏目录。' }
+    # 更新或继续中断的安装时，沿用首次安装前的备份，不能用旧版 Mod 覆盖原文件。
+    foreach ($taskRecord in $taskExisting.files) {
+        $taskRecords.Add($taskRecord)
+        $taskRecorded.Add([string]$taskRecord.path) | Out-Null
+    }
+}
+$taskState = [ordered]@{ status='Installing'; version='1.0.1'; gameRoot=$taskGameRoot; backupRoot=$taskBackupRoot; reusedBepInEx=(-not $taskOwnsLoader); files=$taskRecords }
 New-Item -ItemType Directory -Path $taskBackupRoot -Force | Out-Null
 try {
     foreach ($taskRelative in $taskFiles) {
         $taskDestination = [IO.Path]::GetFullPath((Join-Path $taskGameRoot $taskRelative))
         if (-not $taskDestination.StartsWith($taskRootPrefix, [StringComparison]::OrdinalIgnoreCase)) { throw '安装目标超出了指定的游戏目录。' }
-        $taskHadOriginal = Test-Path -LiteralPath $taskDestination
-        if ($taskHadOriginal) {
-            $taskBackup = Join-Path $taskBackupRoot $taskRelative
-            New-Item -ItemType Directory -Path (Split-Path -Parent $taskBackup) -Force | Out-Null
-            Copy-Item -LiteralPath $taskDestination -Destination $taskBackup -Force
+        if (-not $taskRecorded.Contains($taskRelative)) {
+            $taskHadOriginal = Test-Path -LiteralPath $taskDestination
+            if ($taskHadOriginal) {
+                $taskBackup = Join-Path $taskBackupRoot $taskRelative
+                New-Item -ItemType Directory -Path (Split-Path -Parent $taskBackup) -Force | Out-Null
+                Copy-Item -LiteralPath $taskDestination -Destination $taskBackup -Force
+            }
+            $taskRecords.Add([ordered]@{ path=$taskRelative; existed=$taskHadOriginal })
+            $taskRecorded.Add($taskRelative) | Out-Null
         }
-        $taskRecords.Add([ordered]@{ path=$taskRelative; existed=$taskHadOriginal })
         # 每一步先记录回退信息，即使复制中断也可以运行卸载脚本恢复。
         $taskState | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $taskStatePath -Encoding utf8
         New-Item -ItemType Directory -Path (Split-Path -Parent $taskDestination) -Force | Out-Null

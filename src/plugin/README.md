@@ -6,13 +6,15 @@
 
 ## 安装
 
-关闭游戏，将整个交付包解压到一个独立文件夹。在该文件夹用 PowerShell 执行：
+推荐从发布页下载独立的 `InfantGod-Archive-Setup-v1.0.1.exe`。它自带全部安装文件，双击后选择游戏目录并点击安装即可，也支持更新和卸载。
+
+这个 ZIP 是手动安装包，不能把外层文件夹直接放进 `StreamingAssets/Mods`。手动安装时，将包内的 `BepInEx`、`Aistalt_Data`、`winhttp.dll`、`doorstop_config.ini` 和 `.doorstop_version` 复制到 `Aistalt.exe` 所在的 `Build` 目录并合并文件夹。需要自动备份时，关闭游戏，在解压目录用 PowerShell 执行：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Install-Mod.ps1 -GamePath '你的幼神 Demo\Build'
 ```
 
-`GamePath` 是包含 `Aistalt.exe` 的目录。安装脚本会为覆盖的文件创建备份，已有 BepInEx 5 时复用加载器。
+`GamePath` 是包含 `Aistalt.exe` 的目录。安装脚本会为覆盖的文件创建备份，已有 BepInEx 5 时复用加载器；更新或继续中断的安装时，保留首次安装前的备份。
 
 安装完成后，启动游戏，在 **设置 → Mod 管理器** 中启用 **幼神资料终端**。随后可点击主菜单右上角的资料入口、进入存档后双击 OS 桌面的 **资料终端**，或按 **F8** 打开。标题栏可拖动，`_` 最小化，`□` 最大化或还原，`×` 关闭；F8 也可关闭当前资料窗。
 
@@ -20,7 +22,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Install-Mod.ps1 -GamePath 
 
 运行需要 Windows x64、系统的 .NET Framework 4.8 和 **Microsoft Edge WebView2 Runtime**。安装包已包含网页宿主程序与 SDK 组件；缺少运行时时，可从 [微软官方 WebView2 页面](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)安装 Evergreen Runtime。
 
-请保留本安装包的 `Uninstall-Mod.ps1`，需要回退时关闭游戏并执行：
+请保留本安装包的 `Uninstall-Mod.ps1` 和 `Installer-Common.ps1`，需要回退时关闭游戏并执行，或直接使用图形安装器中的卸载按钮：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Uninstall-Mod.ps1 -GamePath '你的幼神 Demo\Build'

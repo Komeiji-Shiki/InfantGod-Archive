@@ -1,13 +1,18 @@
 ﻿param(
     [Parameter(Mandatory = $true)][string]$GamePath,
-    [string]$CatalogPath = (Join-Path $PSScriptRoot 'catalog.json'),
-    [string]$PreviewPath = (Join-Path $PSScriptRoot 'previews'),
-    [string]$PortraitPath = (Join-Path $PSScriptRoot 'portraits'),
-    [string]$HtmlPath = (Join-Path $PSScriptRoot 'archive.html'),
-    [string]$OutputPath = (Join-Path $PSScriptRoot 'dist\幼神资料终端-Mod')
+    [string]$CatalogPath,
+    [string]$PreviewPath,
+    [string]$PortraitPath,
+    [string]$HtmlPath,
+    [string]$OutputPath
 )
 
 $ErrorActionPreference = 'Stop'
+if (-not $CatalogPath) { $CatalogPath = Join-Path $PSScriptRoot 'catalog.json' }
+if (-not $PreviewPath) { $PreviewPath = Join-Path $PSScriptRoot 'previews' }
+if (-not $PortraitPath) { $PortraitPath = Join-Path $PSScriptRoot 'portraits' }
+if (-not $HtmlPath) { $HtmlPath = Join-Path $PSScriptRoot 'archive.html' }
+if (-not $OutputPath) { $OutputPath = Join-Path $PSScriptRoot 'dist\幼神资料终端-Mod' }
 $taskManaged = Join-Path $GamePath 'Aistalt_Data\Managed'
 if (-not (Test-Path -LiteralPath (Join-Path $taskManaged 'InfantGod.dll'))) {
     throw '没有找到幼神的 Managed 程序集，请通过 -GamePath 指定 Aistalt.exe 所在的 Build 目录。'
@@ -60,7 +65,7 @@ if (Test-Path -LiteralPath $PortraitPath) {
         Copy-Item -LiteralPath $PortraitPath -Destination $taskPluginOutput -Recurse -Force
     }
 }
-foreach ($taskName in @('Install-Mod.ps1','Uninstall-Mod.ps1','README.md','ATTRIBUTIONS.txt','THIRD-PARTY-NOTICES.md')) {
+foreach ($taskName in @('Install-Mod.ps1','Uninstall-Mod.ps1','Installer-Common.ps1','README.md','ATTRIBUTIONS.txt','THIRD-PARTY-NOTICES.md')) {
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot $taskName) -Destination $OutputPath -Force
 }
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'LICENSES') -Destination $OutputPath -Recurse -Force

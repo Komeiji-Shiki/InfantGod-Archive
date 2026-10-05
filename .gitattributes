@@ -2,5 +2,6 @@
 *.ps1 text eol=crlf
 *.png binary
 *.woff2 binary
+*.ttf binary
 *.wav binary
 *.mp4 binary

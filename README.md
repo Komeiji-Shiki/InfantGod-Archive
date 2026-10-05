@@ -22,21 +22,27 @@
 
 ## 下载与安装
 
-发布页提供完整 Mod 包和单文件离线网页。只想查资料，下载 `InfantGod-Archive.html` 后双击打开即可。
+发布页提供独立安装器、完整 Mod 包和单文件离线网页。只想查资料，下载 `InfantGod-Archive.html` 后双击打开即可。
 
-Mod 适用于 **Windows x64、Unity Mono 版《幼神 Demo》**，网页界面使用 **Microsoft Edge WebView2 Runtime**。解压发布包，关闭游戏，在解压目录执行：
+**推荐使用一键安装器：** 下载 `InfantGod-Archive-Setup-v1.0.1.exe`，关闭游戏后双击运行。安装器会自动查找 Steam 中的《幼神》，确认显示的目录后点击“安装资料终端”。也可以点击“浏览…”选择 `Aistalt.exe`。所有 Mod 文件都已包含在 EXE 中，无需解压或输入命令。
+
+安装器沿用游戏的像素字体、配色和爱式塔头像，支持安装、更新、卸载和恢复原文件。目录需要管理员权限时，会按需请求 Windows 授权。安装器可以保存在任意位置，**不要把完整安装包文件夹放进游戏的 `Mods` 目录**，否则游戏会报告该文件夹缺少 `mod.json`。
+
+Mod 适用于 **Windows x64、Unity Mono 版《幼神 Demo》**，安装器需要 Windows .NET Framework 4.8，游戏内网页使用 **Microsoft Edge WebView2 Runtime**。未检测到 WebView2 时，安装器提供微软官方下载入口。
+
+需要手动安装时，将 ZIP 中的 `BepInEx`、`Aistalt_Data`、`winhttp.dll`、`doorstop_config.ini` 和 `.doorstop_version` 复制到 `Aistalt.exe` 所在的 `Build` 目录，并合并文件夹。也可以在解压目录执行脚本，由脚本保存备份：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Install-Mod.ps1 -GamePath '你的幼神 Demo\Build'
 ```
 
-`GamePath` 是 `Aistalt.exe` 所在的文件夹。安装脚本会备份被覆盖的文件，并记录回退信息。已有 BepInEx 5 时复用现有加载器。
+`GamePath` 是 `Aistalt.exe` 所在的文件夹。图形安装器与脚本使用同一套安装逻辑：备份被覆盖的文件，记录回退信息，更新时保留首次安装前的备份。已有 BepInEx 5 时复用现有加载器。
 
 在游戏设置的 **Mod 管理器**中勾选“幼神资料终端”并应用。进入存档后，点击游戏桌面的 **资料终端** 图标，或按 **F8** 打开。窗口支持拖动、最小化、最大化和关闭，并使用游戏任务栏管理。
 
 第一次打开时选择查看范围，当前存档会自动同步到游戏内页面。单独打开离线网页时，可以导入游戏内终端导出的 `progress.json`。
 
-卸载时关闭游戏，在保留的安装包目录执行：
+卸载时关闭游戏，再次打开安装器，点击“卸载并恢复文件”。使用脚本安装的旧版本也能在安装器中更新或卸载。也可以在保留的安装包目录执行：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Uninstall-Mod.ps1 -GamePath '你的幼神 Demo\Build'
@@ -54,7 +60,7 @@ CG 使用独立查看器，不触发主线演出。可以使用原生资源时�
 
 ## 源码与制作
 
-`src/web` 是共用网页界面，`src/plugin` 是窗口与存档接入，`src/webhost` 是 WebView2 宿主，`data` 是资料快照。完整构建方法见 [DATA.md](docs/DATA.md)，窗口接入方式见 [HTML-EMBEDDING.md](docs/HTML-EMBEDDING.md)。
+`src/web` 是共用网页界面，`src/plugin` 是窗口与存档接入，`src/webhost` 是 WebView2 宿主，`src/installer` 是自包含的像素风安装器，`data` 是资料快照。完整构建方法见 [DATA.md](docs/DATA.md)，窗口接入方式见 [HTML-EMBEDDING.md](docs/HTML-EMBEDDING.md)。
 
 宣传片使用真实运行界面、中文字幕和原创配乐。镜头素材、编曲代码与剪辑脚本保留在 `media`，制作所用工具见 [VIDEO-TOOLS.md](docs/VIDEO-TOOLS.md)。
 

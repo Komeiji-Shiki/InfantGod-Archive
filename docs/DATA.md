@@ -20,7 +20,17 @@ python tools/build_web.py
 .\build.ps1 -GamePath '你的幼神 Demo\Build'
 ```
 
-输出为 `dist/InfantGod-Archive-Mod`。首次构建从官方发布源下载 BepInEx 5.4.23.5 和 Microsoft.Web.WebView2 SDK 1.0.4191.47；后续使用缓存。游戏程序集作为本机编译引用。运行游戏内网页还需要 Microsoft Edge WebView2 Runtime。
+输出为 `dist/InfantGod-Archive-Mod`，以及自带全部安装文件的 `dist/InfantGod-Archive-Setup-v1.0.1.exe`。首次构建从官方发布源下载 BepInEx 5.4.23.5 和 Microsoft.Web.WebView2 SDK 1.0.4191.47；后续使用缓存。游戏程序集作为本机编译引用。运行游戏内网页还需要 Microsoft Edge WebView2 Runtime。
+
+只修改安装器界面时，可以复用已经生成的完整 Mod 目录：
+
+```powershell
+python src/installer/build.py --package dist/InfantGod-Archive-Mod --output dist/InfantGod-Archive-Setup-v1.0.1.exe
+```
+
+安装器把安装包、像素字体和头像嵌入单个 EXE。它按需将安装文件解压到临时目录，调用随包的安装/卸载脚本，并在退出时清理临时文件。游戏内的备份、配置与进度由安装脚本管理，不随临时目录清理。Steam 路径通过注册表和 `libraryfolders.vdf` 查找，没有写入开发者的本机路径。
+
+提交源码后，运行 `python tools/package_release.py --output dist/release`，整理安装器、手动安装 ZIP、离线页、发行说明和当前 Git 提交的源码包。
 
 ## 更新资料快照
 

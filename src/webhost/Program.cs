@@ -32,7 +32,17 @@ namespace Graywill.InfantGod.WebHost
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             string profile = values.ContainsKey("--profile") ? values["--profile"] : Path.Combine(Path.GetDirectoryName(values["--html"]), "webhost-profile");
-            Application.Run(new ArchiveForm(parent, parentPid, values["--pipe"], values["--html"], profile));
+            Process game;
+            try { game = Process.GetProcessById((int)parentPid); }
+            catch (ArgumentException) { return; }
+            using (game)
+            {
+                // 嵌入的子窗口可能先被系统销毁，进程退出监听不依赖这个窗口的消息循环。
+                game.Exited += delegate { Environment.Exit(0); };
+                game.EnableRaisingEvents = true;
+                if (game.HasExited) return;
+                Application.Run(new ArchiveForm(parent, parentPid, values["--pipe"], values["--html"], profile));
+            }
         }
     }
 

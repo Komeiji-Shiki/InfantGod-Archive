@@ -5,6 +5,8 @@ $taskGameRoot = [IO.Path]::GetFullPath($GamePath).TrimEnd('\')
 $taskRootPrefix = $taskGameRoot + '\'
 if (-not (Test-Path -LiteralPath (Join-Path $taskGameRoot 'Aistalt.exe'))) { throw '请指定包含 Aistalt.exe 的幼神 Build 目录。' }
 if (Get-Process -Name 'Aistalt' -ErrorAction SilentlyContinue) { throw '请先关闭幼神，再重新运行卸载脚本。' }
+. (Join-Path $PSScriptRoot 'Installer-Common.ps1')
+Stop-ArchiveWebHost -GameRoot $taskGameRoot
 $taskStatePath = Join-Path $taskGameRoot '.InfantGodArchive-install.json'
 if (-not (Test-Path -LiteralPath $taskStatePath)) { throw '没有找到本安装脚本的记录，未改动游戏文件。' }
 $taskState = Get-Content -LiteralPath $taskStatePath -Raw -Encoding UTF8 | ConvertFrom-Json
