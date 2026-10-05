@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <AssemblyName>Graywill.InfantGodCodex</AssemblyName>
     <RootNamespace>Graywill.InfantGodCodex</RootNamespace>
-    <Version>1.1.0</Version>
+    <Version>1.0.4</Version>
     <GameManagedPath Condition="'$(GameManagedPath)' == ''">$(GamePath)\Aistalt_Data\Managed</GameManagedPath>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <RestorePackagesPath>$(MSBuildThisFileDirectory)deps\nuget</RestorePackagesPath>
@@ -18,8 +18,6 @@
     <Reference Include="FairyGUI"><HintPath>$(GameManagedPath)\FairyGUI.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine"><HintPath>$(GameManagedPath)\UnityEngine.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(GameManagedPath)\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.PhysicsModule"><HintPath>$(GameManagedPath)\UnityEngine.PhysicsModule.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="UnityEngine.ScreenCaptureModule"><HintPath>$(GameManagedPath)\UnityEngine.ScreenCaptureModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.AssetBundleModule"><HintPath>$(GameManagedPath)\UnityEngine.AssetBundleModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.IMGUIModule"><HintPath>$(GameManagedPath)\UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.InputLegacyModule"><HintPath>$(GameManagedPath)\UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>

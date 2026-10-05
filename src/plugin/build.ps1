@@ -48,10 +48,6 @@ $taskPluginOutput = Join-Path $OutputPath 'BepInEx\plugins\InfantGodArchive'
 New-Item -ItemType Directory -Path $taskPluginOutput -Force | Out-Null
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'bin\Release\netstandard2.1\Graywill.InfantGodCodex.dll') -Destination $taskPluginOutput -Force
 Copy-Item -LiteralPath $CatalogPath -Destination (Join-Path $taskPluginOutput 'catalog.json') -Force
-$taskChatVoices = Join-Path (Split-Path -Parent $CatalogPath) 'chat-voices.json'
-if (Test-Path -LiteralPath $taskChatVoices) {
-    Copy-Item -LiteralPath $taskChatVoices -Destination (Join-Path $taskPluginOutput 'chat-voices.json') -Force
-}
 if (Test-Path -LiteralPath $PreviewPath) {
     $taskPreviewOutput = Join-Path $taskPluginOutput 'previews'
     if ([IO.Path]::GetFullPath($PreviewPath) -ne [IO.Path]::GetFullPath($taskPreviewOutput)) {

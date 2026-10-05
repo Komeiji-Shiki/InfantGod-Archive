@@ -1,8 +1,8 @@
 {
   "name": "幼神资料终端",
-  "version": "1.1.0",
+  "version": "1.0.4",
   "gameVersion": "1.0",
   "loadOrder": 1000,
   "author": "Komeiji-Shiki / Graywill",
-  "description": "爱式塔·技术整理的剧情资料，F8 打开。F9 在原聊天窗口自由交谈，支持 LLM 工具调用和本机 MCP；API 与上下文选项在设置的 LLM 页填写。关闭此 Mod 会关闭功能并移除入口。程序由配套插件提供。"
+  "description": "爱式塔·技术整理的剧情资料。查看角色路线、人格发言、协议、记忆、成就与 CG。启用后在桌面显示“资料终端”，也可使用 F8；关闭此 Mod 会关闭资料窗并移除入口。程序由配套插件提供。"
 }

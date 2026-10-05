@@ -13,7 +13,6 @@ using InfantGod.Dialogue;
 using InfantGod.UI.WindowSystem.Windows;
 using Newtonsoft.Json;
 using UnityEngine;
-using Graywill.InfantGodCodex.LiveChat;
 
 namespace Graywill.InfantGodCodex
 {
@@ -31,7 +30,6 @@ namespace Graywill.InfantGodCodex
         private CGViewer viewer;
         private GameIntegration integration;
         private WebHostBridge webHost;
-        private LiveChatController liveChat;
         private GUIStyle noticeStyle;
         private Font noticeFont;
         private float nextRefresh;
@@ -41,9 +39,8 @@ namespace Graywill.InfantGodCodex
         internal float NoticeUntil { get; private set; }
         internal bool IsOpen { get; private set; }
         internal bool IsAvailable { get; private set; }
-        internal bool NativeSettingsVisible => liveChat?.NativeSettingsVisible ?? false;
         internal GameIntegration Integration => integration;
-        private bool CaptureGameInput => IsOpen && integration != null && integration.WindowFocused || liveChat != null && liveChat.CapturesInput;
+        private bool CaptureGameInput => IsOpen && integration != null && integration.WindowFocused;
 
         internal static void Configure(ManualLogSource log, ConfigFile config, string path)
         {
@@ -75,7 +72,6 @@ namespace Graywill.InfantGodCodex
                 PatchInput(typeof(PVShortcutManager), "Update");
                 integration = new GameIntegration(this);
                 webHost = new WebHostBridge(this, catalog, runtime, viewer);
-                liveChat = new LiveChatController(this, catalog, runtime);
                 ShowNotice("资料终端已载入。按 " + OpenKey.Value + " 打开。", 8);
                 Logger.LogInfo("幼神资料终端载入完成：" + catalog.entries.Count + " 条资料，" + catalog.cg.Count + " 个 CG。");
             }
@@ -112,7 +108,7 @@ namespace Graywill.InfantGodCodex
                 {
                     SetOpen(!IsOpen || !integration.WindowShowing);
                 }
-                if (Input.GetKeyDown(KeyCode.Escape) && IsOpen && integration.WindowFocused) SetOpen(false);
+                if (Input.GetKeyDown(KeyCode.Escape) && CaptureGameInput) SetOpen(false);
                 runtime.ObserveCG();
                 if (IsOpen && Time.unscaledTime >= nextRefresh) RefreshProgress();
             }
@@ -120,7 +116,6 @@ namespace Graywill.InfantGodCodex
             webHost?.Tick();
             // 入口资源初始化在核心更新之后，入口尚未准备好时快捷键仍可使用。
             integration.Tick();
-            liveChat?.Tick(IsAvailable);
         }
 
         private void LateUpdate()
@@ -226,7 +221,6 @@ namespace Graywill.InfantGodCodex
 
         private void OnDestroy()
         {
-            liveChat?.Dispose();
             webHost?.Dispose();
             integration?.Dispose();
             if (runtime != null)

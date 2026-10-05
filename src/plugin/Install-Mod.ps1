@@ -1,4 +1,4 @@
-param([Parameter(Mandatory = $true)][string]$GamePath)
+﻿param([Parameter(Mandatory = $true)][string]$GamePath)
 $ErrorActionPreference = 'Stop'
 
 $taskGameRoot = [IO.Path]::GetFullPath($GamePath).TrimEnd('\')
@@ -55,7 +55,7 @@ if ($taskExisting) {
         $taskRecorded.Add([string]$taskRecord.path) | Out-Null
     }
 }
-$taskState = [ordered]@{ status='Installing'; version='1.1.0'; gameRoot=$taskGameRoot; backupRoot=$taskBackupRoot; reusedBepInEx=(-not $taskOwnsLoader); files=$taskRecords }
+$taskState = [ordered]@{ status='Installing'; version='1.0.4'; gameRoot=$taskGameRoot; backupRoot=$taskBackupRoot; reusedBepInEx=(-not $taskOwnsLoader); files=$taskRecords }
 New-Item -ItemType Directory -Path $taskBackupRoot -Force | Out-Null
 try {
     foreach ($taskRelative in $taskFiles) {

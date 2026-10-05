@@ -12,8 +12,6 @@ dist/
 **/*.pdb
 **/*.dll
 **/webhost-profile/
-**/livechat-data/
-**/mcp-endpoint.json
 **/webhost-session*.json
 **/*.log
 !media/*.png
