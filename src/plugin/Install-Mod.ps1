@@ -55,7 +55,7 @@ if ($taskExisting) {
         $taskRecorded.Add([string]$taskRecord.path) | Out-Null
     }
 }
-$taskState = [ordered]@{ status='Installing'; version='1.0.2'; gameRoot=$taskGameRoot; backupRoot=$taskBackupRoot; reusedBepInEx=(-not $taskOwnsLoader); files=$taskRecords }
+$taskState = [ordered]@{ status='Installing'; version='1.0.3'; gameRoot=$taskGameRoot; backupRoot=$taskBackupRoot; reusedBepInEx=(-not $taskOwnsLoader); files=$taskRecords }
 New-Item -ItemType Directory -Path $taskBackupRoot -Force | Out-Null
 try {
     foreach ($taskRelative in $taskFiles) {

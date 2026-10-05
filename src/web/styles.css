@@ -21,3 +21,17 @@
 @media(max-width:640px){.story-note{padding:18px;gap:14px}.story-note>img{width:58px;height:58px}.story-note h2{font-size:23px}.story-note p{font-size:14px}.graph-controls .graph-zoom{display:none}}
 .embedded .osbar{display:none}.embedded .desktop{max-width:none;min-height:100vh}.embedded .sidebar{top:0;height:100vh}.embedded .workspace{padding-top:22px}.embedded .content{min-height:calc(100vh - 160px)}.embedded .story-flow.graph-expanded{inset:8px}.embedded .graph-expanded .graph-stage{height:calc(100vh - 67px)}.native-cg-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 20px;border-top:1px solid #718373;background:var(--paper2)}.native-cg-controls button,.native-cg-controls select{font:16px var(--pixel);padding:6px 10px}.native-cg-controls label{display:flex;align-items:center;gap:10px;font-size:14px}.native-cg-controls input[type=range]{width:180px;padding:0;accent-color:var(--accent)}
 @media(max-width:950px){.embedded .sidebar{height:auto;position:relative;top:auto}}
+
+/* 页面、侧栏与详情窗口共用直角滚动条，颜色与原生终端保持一致。 */
+@supports selector(::-webkit-scrollbar){
+  *{scrollbar-width:auto;scrollbar-color:auto}
+  ::-webkit-scrollbar{width:12px;height:12px;background:var(--paper2)}
+  ::-webkit-scrollbar-track{background:var(--paper2)}
+  ::-webkit-scrollbar-thumb{min-height:36px;min-width:36px;background:var(--ink);border:2px solid var(--paper2);border-radius:0}
+  ::-webkit-scrollbar-thumb:hover,::-webkit-scrollbar-thumb:active{background:var(--accent)}
+  ::-webkit-scrollbar-button{display:none;width:0;height:0}
+  ::-webkit-scrollbar-corner{background:var(--paper2)}
+}
+@supports not selector(::-webkit-scrollbar){
+  *{scrollbar-width:thin;scrollbar-color:var(--ink) var(--paper2)}
+}
