@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <AssemblyName>Graywill.InfantGodCodex</AssemblyName>
     <RootNamespace>Graywill.InfantGodCodex</RootNamespace>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <GameManagedPath Condition="'$(GameManagedPath)' == ''">$(GamePath)\Aistalt_Data\Managed</GameManagedPath>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <RestorePackagesPath>$(MSBuildThisFileDirectory)deps\nuget</RestorePackagesPath>

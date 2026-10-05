@@ -131,7 +131,8 @@ namespace Graywill.InfantGodCodex
             clientBackground.SetXY(client.x, client.y);
             pane.AddChildAt(clientBackground, 0);
             backgroundPreview = new GImage { name = "InfantGodArchive_BackgroundPreview", touchable = false };
-            pane.AddChildAt(backgroundPreview, 1);
+            // frame 自带不透明的客户区底板，预览必须在它上方；预览范围不覆盖标题栏。
+            pane.AddChild(backgroundPreview);
             pane.onSizeChanged.Add(ResizeClient);
             frame?.onSizeChanged.Add(ResizeClient);
             ResizeClient();
