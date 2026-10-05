@@ -43,6 +43,7 @@ namespace Graywill.InfantGodCodex
             hooks.Patch(AccessTools.Method(typeof(ShortCutManager), "CreateSaveData"), postfix: new HarmonyMethod(typeof(GameIntegration), nameof(ExcludeRuntimeShortcut)));
             hooks.Patch(AccessTools.Method(typeof(ShortCut), "GetLocalizedName"), prefix: new HarmonyMethod(typeof(GameIntegration), nameof(GetArchiveShortcutName)));
             hooks.Patch(AccessTools.Method(typeof(OSManager), "CreateWindow"), prefix: new HarmonyMethod(typeof(GameIntegration), nameof(CreateArchiveWindow)));
+            hooks.Patch(AccessTools.Method(typeof(OSManager), "ApplyWindowFullScreenState"), postfix: new HarmonyMethod(typeof(GameIntegration), nameof(FitArchiveFullScreen)));
             hooks.Patch(AccessTools.Method(typeof(OSManager), "OnWorkspaceClicked"), prefix: new HarmonyMethod(typeof(GameIntegration), nameof(KeepArchiveWindowSelection)));
             hooks.Patch(AccessTools.Method(typeof(FGUICommandManager), "GetBaseUserData"), prefix: new HarmonyMethod(typeof(GameIntegration), nameof(GetOwnBaseUserData)));
             ModLoader.ModPreferencesChanged += RefreshEnabled;
@@ -61,6 +62,12 @@ namespace Graywill.InfantGodCodex
         {
             // 原工作区命中判断没有处理最大化缩放，资料窗口的点击沿原生命中链判断。
             return ArchiveHost.Instance == null || !ArchiveHost.Instance.Integration.nativeWindow.IsOwnWorkspaceTouch();
+        }
+
+        private static void FitArchiveFullScreen(string __0)
+        {
+            if (__0 == NativeWindow.WindowName)
+                ArchiveHost.Instance?.Integration.nativeWindow.FitFullScreen();
         }
 
         private static bool GetOwnBaseUserData(GObject obj, ref string __result)

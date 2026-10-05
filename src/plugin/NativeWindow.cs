@@ -19,6 +19,7 @@ namespace Graywill.InfantGodCodex
         private Rect restoredBounds;
         private bool standaloneMaximized;
         private bool usingOS;
+        private int openedFrame = -1;
         private static readonly FieldInfo RegistryField = typeof(OSManager).GetField("_windowRegistry", BindingFlags.Instance | BindingFlags.NonPublic);
         private static readonly FieldInfo LookupField = typeof(WindowRegistry).GetField("_lookup", BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -49,6 +50,7 @@ namespace Graywill.InfantGodCodex
 
         internal void Open()
         {
+            openedFrame = Time.frameCount;
             if (os == null) os = UnityEngine.Object.FindObjectOfType<OSManager>();
             object registry = os == null ? null : RegistryField.GetValue(os);
             if (registry != null)
@@ -78,11 +80,13 @@ namespace Graywill.InfantGodCodex
             pane.name = "InfantGodArchive_Content";
             var textLoader = pane.GetChild("Panel_TextLoader");
             if (textLoader != null) textLoader.visible = false;
-            window.contentPane = pane;
             frame = pane.GetChild("frame")?.asCom;
-            // 框体与内容面板的原始尺寸不同，先保留原生框体尺寸再建立同步关系。
-            float templateWidth = frame != null ? frame.width : pane.width;
-            float templateHeight = frame != null ? frame.height : pane.height;
+            // 文字模板是窄幅信件；资料页沿用图片模板的横向尺寸，与 OS 的最大化比例一致。
+            var mediaSize = UIPackage.CreateObject("Media", "Window_Media_Image");
+            float templateWidth = mediaSize.width;
+            float templateHeight = mediaSize.height;
+            mediaSize.Dispose();
+            window.contentPane = pane;
             if (frame != null)
             {
                 // Media 模板的框体没有跟随内容面板的尺寸，需要显式建立关系。
@@ -190,10 +194,24 @@ namespace Graywill.InfantGodCodex
         internal bool IsOwnWorkspaceTouch()
         {
             if (!usingOS || !IsShowing || GRoot.inst == null) return false;
+            // 打开快捷方式的同一次点击不能继续被工作区当成空白点击而取消焦点。
+            if (openedFrame == Time.frameCount) return true;
             // 点击按钮后窗口会立刻缩放或还原，命中对象比变化后的矩形更准确。
             for (GObject target = GRoot.inst.touchTarget; target != null; target = target.parent)
                 if (target == window) return true;
             return false;
+        }
+
+        internal void FitFullScreen()
+        {
+            if (window == null || window.parent == null) return;
+            Rect canvas = GRoot.inst.LocalToGlobal(DisplaySettingsManager.GetCanvasRect());
+            Vector2 top = window.parent.GlobalToLocal(new Vector2(Mathf.Max(0, canvas.xMin), Mathf.Max(0, canvas.yMin)));
+            Vector2 bottom = window.parent.GlobalToLocal(new Vector2(Mathf.Min(Stage.inst.width, canvas.xMax), Mathf.Min(Stage.inst.height, canvas.yMax)));
+            // 原生 OS 使用固定倍率，按实际画布收紧边缘，避免标题按钮和底部越界。
+            float scale = Mathf.Min((bottom.x - top.x - 16) / window.width, (bottom.y - top.y - 16) / window.height);
+            window.SetXY(top.x + 8, top.y + 8);
+            window.SetScale(scale, scale);
         }
 
         internal Rect ScreenClientBounds()
